@@ -6,53 +6,45 @@
 
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { POST } from '@/app/api/payments/verify/route';
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
-// Mock modules
-vi.mock('@/lib/supabase/server');
-vi.mock('@/lib/rate-limit');
+// Mock modules - mock the actual helper functions used by the route
+vi.mock('@/lib/api/payment-verify');
 vi.mock('@/lib/transaction');
 vi.mock('@/lib/notifications');
+vi.mock('@/lib/logger');
 vi.mock('@sentry/nextjs');
 
 describe('POST /api/payments/verify', () => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Test mocks require flexible typing
-  let mockSupabase: any;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Test mocks require flexible typing
-  let mockCreateClient: any;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Test mocks require flexible typing
-  let mockCheckRateLimit: any;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Test mocks require flexible typing
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let mockVerifyPaymentAuth: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let mockVerifyOrderForPayment: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let mockCreatePaymentWithIdempotency: any;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Test mocks require flexible typing
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let mockNotifyPaymentReceived: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let mockSupabase: any;
 
   beforeEach(async () => {
-    // Setup Supabase mock
+    // Setup mock Supabase client
     mockSupabase = {
-      auth: {
-        getUser: vi.fn(),
-      },
-      from: vi.fn(),
+      from: vi.fn().mockReturnThis(),
+      update: vi.fn().mockReturnThis(),
+      eq: vi.fn().mockResolvedValue({ error: null }),
     };
 
-    mockCreateClient = vi.fn().mockResolvedValue(mockSupabase);
-
-    // Setup rate limit mock (success by default)
-    mockCheckRateLimit = vi.fn().mockResolvedValue({ success: true });
-
-    // Setup transaction mock
+    // Setup helper mocks
+    mockVerifyPaymentAuth = vi.fn();
+    mockVerifyOrderForPayment = vi.fn();
     mockCreatePaymentWithIdempotency = vi.fn();
-
-    // Setup notification mock
     mockNotifyPaymentReceived = vi.fn().mockResolvedValue({});
 
     // Apply mocks
-    const supabaseServer = await import('@/lib/supabase/server');
-    vi.mocked(supabaseServer.createClient).mockImplementation(mockCreateClient);
-
-    const rateLimit = await import('@/lib/rate-limit');
-    vi.mocked(rateLimit.checkRateLimit).mockImplementation(mockCheckRateLimit);
+    const paymentVerify = await import('@/lib/api/payment-verify');
+    vi.mocked(paymentVerify.verifyPaymentAuth).mockImplementation(mockVerifyPaymentAuth);
+    vi.mocked(paymentVerify.verifyOrderForPayment).mockImplementation(mockVerifyOrderForPayment);
 
     const transaction = await import('@/lib/transaction');
     vi.mocked(transaction.createPaymentWithIdempotency).mockImplementation(
@@ -72,9 +64,9 @@ describe('POST /api/payments/verify', () => {
    */
   describe('Authentication', () => {
     it('should return 401 when user is not authenticated (auth error)', async () => {
-      mockSupabase.auth.getUser.mockResolvedValue({
-        data: { user: null },
-        error: { message: 'Not authenticated' },
+      mockVerifyPaymentAuth.mockResolvedValue({
+        success: false,
+        error: NextResponse.json({ error: '인증이 필요합니다' }, { status: 401 }),
       });
 
       const request = new NextRequest('http://localhost:3000/api/payments/verify', {
@@ -93,9 +85,9 @@ describe('POST /api/payments/verify', () => {
     });
 
     it('should return 401 when user is null', async () => {
-      mockSupabase.auth.getUser.mockResolvedValue({
-        data: { user: null },
-        error: null,
+      mockVerifyPaymentAuth.mockResolvedValue({
+        success: false,
+        error: NextResponse.json({ error: '인증이 필요합니다' }, { status: 401 }),
       });
 
       const request = new NextRequest('http://localhost:3000/api/payments/verify', {
@@ -119,24 +111,14 @@ describe('POST /api/payments/verify', () => {
    */
   describe('Rate Limiting', () => {
     it('should return 429 when rate limit is exceeded', async () => {
-      mockSupabase.auth.getUser.mockResolvedValue({
-        data: { user: { id: 'user-123' } },
-        error: null,
-      });
-
-      const rateLimitResponse = new Response(
-        JSON.stringify({
-          error: '너무 많은 요청이 발생했습니다. 잠시 후 다시 시도해주세요.',
-          limit: 5,
-          remaining: 0,
-          reset: new Date().toISOString(),
-        }),
-        { status: 429 }
-      );
-
-      mockCheckRateLimit.mockResolvedValue({
+      mockVerifyPaymentAuth.mockResolvedValue({
         success: false,
-        error: rateLimitResponse,
+        error: new Response(
+          JSON.stringify({
+            error: '너무 많은 요청이 발생했습니다. 잠시 후 다시 시도해주세요.',
+          }),
+          { status: 429 }
+        ),
       });
 
       const request = new NextRequest('http://localhost:3000/api/payments/verify', {
@@ -157,14 +139,12 @@ describe('POST /api/payments/verify', () => {
    * Input Validation Tests
    */
   describe('Input Validation', () => {
-    beforeEach(() => {
-      mockSupabase.auth.getUser.mockResolvedValue({
-        data: { user: { id: 'user-123' } },
-        error: null,
-      });
-    });
-
     it('should return 400 when payment_id is missing', async () => {
+      mockVerifyPaymentAuth.mockResolvedValue({
+        success: false,
+        error: NextResponse.json({ error: '필수 정보가 누락되었습니다' }, { status: 400 }),
+      });
+
       const request = new NextRequest('http://localhost:3000/api/payments/verify', {
         method: 'POST',
         body: JSON.stringify({
@@ -180,6 +160,11 @@ describe('POST /api/payments/verify', () => {
     });
 
     it('should return 400 when order_id is missing', async () => {
+      mockVerifyPaymentAuth.mockResolvedValue({
+        success: false,
+        error: NextResponse.json({ error: '필수 정보가 누락되었습니다' }, { status: 400 }),
+      });
+
       const request = new NextRequest('http://localhost:3000/api/payments/verify', {
         method: 'POST',
         body: JSON.stringify({
@@ -195,6 +180,11 @@ describe('POST /api/payments/verify', () => {
     });
 
     it('should return 400 when order_id is not a valid UUID', async () => {
+      mockVerifyPaymentAuth.mockResolvedValue({
+        success: false,
+        error: NextResponse.json({ error: '유효하지 않은 주문 ID입니다' }, { status: 400 }),
+      });
+
       const request = new NextRequest('http://localhost:3000/api/payments/verify', {
         method: 'POST',
         body: JSON.stringify({
@@ -215,21 +205,16 @@ describe('POST /api/payments/verify', () => {
    * Order Validation Tests
    */
   describe('Order Validation', () => {
-    beforeEach(() => {
-      mockSupabase.auth.getUser.mockResolvedValue({
-        data: { user: { id: 'user-123' } },
-        error: null,
-      });
-    });
-
     it('should return 404 when order is not found', async () => {
-      mockSupabase.from.mockReturnValue({
-        select: vi.fn().mockReturnThis(),
-        eq: vi.fn().mockReturnThis(),
-        single: vi.fn().mockResolvedValue({
-          data: null,
-          error: { message: 'Not found' },
-        }),
+      mockVerifyPaymentAuth.mockResolvedValue({
+        success: true,
+        user: { id: 'user-123' },
+        supabase: mockSupabase,
+        body: { payment_id: 'pay-123', order_id: '123e4567-e89b-12d3-a456-426614174000' },
+      });
+      mockVerifyOrderForPayment.mockResolvedValue({
+        success: false,
+        error: NextResponse.json({ error: '주문을 찾을 수 없습니다' }, { status: 404 }),
       });
 
       const request = new NextRequest('http://localhost:3000/api/payments/verify', {
@@ -248,19 +233,15 @@ describe('POST /api/payments/verify', () => {
     });
 
     it('should return 403 when user is not the buyer', async () => {
-      mockSupabase.from.mockReturnValue({
-        select: vi.fn().mockReturnThis(),
-        eq: vi.fn().mockReturnThis(),
-        single: vi.fn().mockResolvedValue({
-          data: {
-            id: '123e4567-e89b-12d3-a456-426614174000',
-            buyer_id: 'other-user-123',
-            seller_id: 'seller-123',
-            total_amount: 10000,
-            status: 'pending_payment',
-          },
-          error: null,
-        }),
+      mockVerifyPaymentAuth.mockResolvedValue({
+        success: true,
+        user: { id: 'user-123' },
+        supabase: mockSupabase,
+        body: { payment_id: 'pay-123', order_id: '123e4567-e89b-12d3-a456-426614174000' },
+      });
+      mockVerifyOrderForPayment.mockResolvedValue({
+        success: false,
+        error: NextResponse.json({ error: '구매자만 결제 검증을 할 수 있습니다' }, { status: 403 }),
       });
 
       const request = new NextRequest('http://localhost:3000/api/payments/verify', {
@@ -279,19 +260,15 @@ describe('POST /api/payments/verify', () => {
     });
 
     it('should return 400 when order is already paid', async () => {
-      mockSupabase.from.mockReturnValue({
-        select: vi.fn().mockReturnThis(),
-        eq: vi.fn().mockReturnThis(),
-        single: vi.fn().mockResolvedValue({
-          data: {
-            id: '123e4567-e89b-12d3-a456-426614174000',
-            buyer_id: 'user-123',
-            seller_id: 'seller-123',
-            total_amount: 10000,
-            status: 'paid',
-          },
-          error: null,
-        }),
+      mockVerifyPaymentAuth.mockResolvedValue({
+        success: true,
+        user: { id: 'user-123' },
+        supabase: mockSupabase,
+        body: { payment_id: 'pay-123', order_id: '123e4567-e89b-12d3-a456-426614174000' },
+      });
+      mockVerifyOrderForPayment.mockResolvedValue({
+        success: false,
+        error: NextResponse.json({ error: '이미 결제된 주문입니다' }, { status: 400 }),
       });
 
       const request = new NextRequest('http://localhost:3000/api/payments/verify', {
@@ -310,19 +287,15 @@ describe('POST /api/payments/verify', () => {
     });
 
     it('should return 400 when order status is in_progress', async () => {
-      mockSupabase.from.mockReturnValue({
-        select: vi.fn().mockReturnThis(),
-        eq: vi.fn().mockReturnThis(),
-        single: vi.fn().mockResolvedValue({
-          data: {
-            id: '123e4567-e89b-12d3-a456-426614174000',
-            buyer_id: 'user-123',
-            seller_id: 'seller-123',
-            total_amount: 10000,
-            status: 'in_progress',
-          },
-          error: null,
-        }),
+      mockVerifyPaymentAuth.mockResolvedValue({
+        success: true,
+        user: { id: 'user-123' },
+        supabase: mockSupabase,
+        body: { payment_id: 'pay-123', order_id: '123e4567-e89b-12d3-a456-426614174000' },
+      });
+      mockVerifyOrderForPayment.mockResolvedValue({
+        success: false,
+        error: NextResponse.json({ error: '이미 결제된 주문입니다' }, { status: 400 }),
       });
 
       const request = new NextRequest('http://localhost:3000/api/payments/verify', {
@@ -345,44 +318,33 @@ describe('POST /api/payments/verify', () => {
    * Payment Creation Tests
    */
   describe('Payment Creation', () => {
+    const mockOrder = {
+      id: '123e4567-e89b-12d3-a456-426614174000',
+      buyer_id: 'user-123',
+      seller_id: 'seller-123',
+      total_amount: 10000,
+      status: 'pending_payment',
+    };
+
     beforeEach(() => {
-      mockSupabase.auth.getUser.mockResolvedValue({
-        data: { user: { id: 'user-123' } },
-        error: null,
+      // Setup default successful auth and order verification
+      mockVerifyPaymentAuth.mockResolvedValue({
+        success: true,
+        user: { id: 'user-123' },
+        supabase: mockSupabase,
+        body: { payment_id: 'pay-123', order_id: '123e4567-e89b-12d3-a456-426614174000' },
+      });
+      mockVerifyOrderForPayment.mockResolvedValue({
+        success: true,
+        order: mockOrder,
       });
 
-      const mockFrom = vi.fn((tableName: string) => {
-        if (tableName === 'orders') {
-          return {
-            select: vi.fn().mockReturnThis(),
-            eq: vi.fn().mockReturnThis(),
-            single: vi.fn().mockResolvedValue({
-              data: {
-                id: '123e4567-e89b-12d3-a456-426614174000',
-                buyer_id: 'user-123',
-                seller_id: 'seller-123',
-                total_amount: 10000,
-                status: 'pending_payment',
-              },
-              error: null,
-            }),
-            update: vi.fn().mockReturnThis(),
-          };
-        }
-        if (tableName === 'payment_requests') {
-          return {
-            update: vi.fn().mockReturnThis(),
-            eq: vi.fn().mockResolvedValue({ data: {}, error: null }),
-          };
-        }
-        return {
-          select: vi.fn().mockReturnThis(),
-          eq: vi.fn().mockReturnThis(),
-          single: vi.fn().mockResolvedValue({ data: null, error: null }),
-        };
+      // Setup Supabase from mock
+      mockSupabase.from = vi.fn().mockReturnValue({
+        update: vi.fn().mockReturnValue({
+          eq: vi.fn().mockResolvedValue({ error: null }),
+        }),
       });
-
-      mockSupabase.from = mockFrom;
     });
 
     it('should return 500 when payment creation fails', async () => {

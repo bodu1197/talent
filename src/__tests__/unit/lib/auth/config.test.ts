@@ -121,7 +121,7 @@ describe('Auth Config', () => {
       const data = { redirectTo: '/dashboard', userId: '123' };
       const state = createOAuthState(data);
 
-      const decoded = JSON.parse(atob(state));
+      const decoded = JSON.parse(decodeURIComponent(atob(state)));
       expect(decoded).toHaveProperty('redirectTo', '/dashboard');
       expect(decoded).toHaveProperty('userId', '123');
     });
@@ -132,7 +132,7 @@ describe('Auth Config', () => {
       const state = createOAuthState(data);
       const afterTime = Date.now();
 
-      const decoded = JSON.parse(atob(state));
+      const decoded = JSON.parse(decodeURIComponent(atob(state)));
       expect(decoded).toHaveProperty('timestamp');
       expect(decoded.timestamp).toBeGreaterThanOrEqual(beforeTime);
       expect(decoded.timestamp).toBeLessThanOrEqual(afterTime);
@@ -142,7 +142,7 @@ describe('Auth Config', () => {
       const data = { test: 'value' };
       const state = createOAuthState(data);
 
-      const decoded = JSON.parse(atob(state));
+      const decoded = JSON.parse(decodeURIComponent(atob(state)));
       expect(decoded).toHaveProperty('nonce');
       expect(typeof decoded.nonce).toBe('string');
       expect(decoded.nonce.length).toBeGreaterThan(0);
@@ -160,7 +160,7 @@ describe('Auth Config', () => {
     it('should handle empty data object', () => {
       const state = createOAuthState({});
 
-      const decoded = JSON.parse(atob(state));
+      const decoded = JSON.parse(decodeURIComponent(atob(state)));
       expect(decoded).toHaveProperty('timestamp');
       expect(decoded).toHaveProperty('nonce');
     });
@@ -172,7 +172,7 @@ describe('Auth Config', () => {
       };
       const state = createOAuthState(data);
 
-      const decoded = JSON.parse(atob(state));
+      const decoded = JSON.parse(decodeURIComponent(atob(state)));
       expect(decoded).toHaveProperty('user');
       expect(decoded.user).toEqual({ id: '123', name: 'Test' });
       expect(decoded.settings).toEqual({ theme: 'dark' });
@@ -291,12 +291,14 @@ describe('Auth Config', () => {
     it('should handle state with special characters', () => {
       const now = Date.now();
       const state = btoa(
-        JSON.stringify({
-          message: 'Hello, World!',
-          symbols: '!@#$%^&*()',
-          timestamp: now,
-          nonce: 'test',
-        })
+        encodeURIComponent(
+          JSON.stringify({
+            message: 'Hello, World!',
+            symbols: '!@#$%^&*()',
+            timestamp: now,
+            nonce: 'test',
+          })
+        )
       );
 
       const parsed = parseOAuthState(state);
