@@ -704,12 +704,12 @@ export default function NewErrandPage() {
 
             {/* 도착지 / 배달 받을 주소 */}
             <div className="bg-white rounded-xl border border-gray-200 p-4">
-              <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
-                <div
+              <span className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
+                <span
                   className={`w-2 h-2 rounded-full ${formData.category === 'SHOPPING' ? 'bg-green-500' : 'bg-red-500'}`}
                 />
                 {formData.category === 'SHOPPING' ? '배달 받을 주소' : '도착지'}
-              </label>
+              </span>
               <button
                 type="button"
                 onClick={handleDeliverySearch}
@@ -738,10 +738,10 @@ export default function NewErrandPage() {
             {formData.category === 'DELIVERY' && (
               <div className="bg-white rounded-xl border border-gray-200 p-4">
                 <div className="flex items-center justify-between mb-3">
-                  <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
+                  <span className="flex items-center gap-2 text-sm font-medium text-gray-700">
                     <Package className="w-4 h-4" />
                     다중 배달
-                  </label>
+                  </span>
                   <button
                     type="button"
                     onClick={toggleMultiStop}
@@ -850,10 +850,10 @@ export default function NewErrandPage() {
               <>
                 {/* 범위 선택 */}
                 <div className="bg-white rounded-xl border border-gray-200 p-4">
-                  <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-3">
+                  <span className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-3">
                     <MapPin className="w-4 h-4" />
                     구매 범위
-                  </label>
+                  </span>
                   <p className="text-xs text-gray-500 mb-3">
                     라이더가 물건을 구매할 범위를 선택해주세요
                   </p>
@@ -883,10 +883,10 @@ export default function NewErrandPage() {
                 {/* 특정 장소 지정 시 주소 입력 */}
                 {shoppingRange === 'SPECIFIC' && (
                   <div className="bg-white rounded-xl border border-gray-200 p-4">
-                    <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
+                    <span className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
                       <MapPin className="w-4 h-4 text-green-600" />
                       구매 장소
-                    </label>
+                    </span>
                     <button
                       type="button"
                       onClick={handleShoppingLocationSearch}
@@ -918,10 +918,10 @@ export default function NewErrandPage() {
 
                 {/* 구매 품목 리스트 */}
                 <div className="bg-white rounded-xl border border-gray-200 p-4">
-                  <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
+                  <span className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
                     <ShoppingCart className="w-4 h-4" />
                     구매 품목
-                  </label>
+                  </span>
                   <p className="text-xs text-gray-500 mb-3">
                     {PRICING_CONSTANTS.SHOPPING_FREE_ITEMS}개까지 무료, 이후 품목당 +
                     {PRICING_CONSTANTS.SHOPPING_ITEM_PRICE.toLocaleString()}원
@@ -975,10 +975,10 @@ export default function NewErrandPage() {
                 <div className="bg-white rounded-xl border border-gray-200 p-4">
                   <div className="flex items-center justify-between">
                     <div>
-                      <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
+                      <span className="flex items-center gap-2 text-sm font-medium text-gray-700">
                         <Weight className="w-4 h-4" />
                         무거운 물품 포함
-                      </label>
+                      </span>
                       <p className="text-xs text-gray-500 mt-1">
                         쌀, 음료 박스 등 (+
                         {PRICING_CONSTANTS.WEIGHT_HEAVY_SURCHARGE.toLocaleString()}원)
@@ -1029,10 +1029,10 @@ export default function NewErrandPage() {
             {/* 무게 선택 (배달 카테고리만) */}
             {formData.category === 'DELIVERY' && (
               <div className="bg-white rounded-xl border border-gray-200 p-4">
-                <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-3">
+                <span className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-3">
                   <Weight className="w-4 h-4" />
                   물품 무게
-                </label>
+                </span>
                 <div className="flex flex-wrap gap-2">
                   {WEIGHT_OPTIONS.map((opt) => (
                     <button
