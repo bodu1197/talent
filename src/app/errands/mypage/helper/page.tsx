@@ -184,24 +184,61 @@ export default function ErrandHelperDashboard() {
                 </ul>
               </div>
 
-              <div className="bg-blue-50 rounded-lg p-3">
-                <p className="text-xs font-medium text-blue-800 mb-2">발급 방법</p>
+              <div className="bg-blue-50 rounded-lg p-3 mb-3">
+                <p className="text-xs font-semibold text-blue-800 mb-2">
+                  1. 온라인 발급 (가장 간편한 방법)
+                </p>
+                <p className="text-xs text-blue-700 mb-2">
+                  공인인증서나 간편인증(카카오, PASS 등)이 있다면 집에서 바로 출력할 수 있습니다.
+                </p>
                 <ol className="text-xs text-blue-700 space-y-0.5 mb-2">
-                  <li>1. 정부24 접속</li>
+                  <li>1. 정부24 또는 경찰청 범죄경력회보서 발급시스템 접속</li>
                   <li>2. &quot;범죄경력회보서&quot; 검색</li>
                   <li>3. &quot;취업용&quot; 선택</li>
                   <li>4. 성범죄경력 조회 포함 체크</li>
                   <li>5. 무료 발급 완료</li>
                 </ol>
-                <a
-                  href="https://www.gov.kr"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 text-xs text-blue-600 font-medium hover:underline"
-                >
-                  정부24 바로가기
-                  <ExternalLink className="w-3 h-3" />
-                </a>
+                <div className="flex flex-wrap gap-2">
+                  <a
+                    href="https://www.gov.kr"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-xs text-blue-600 font-medium hover:underline"
+                  >
+                    정부24 바로가기
+                    <ExternalLink className="w-3 h-3" />
+                  </a>
+                  <a
+                    href="https://crims.police.go.kr"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-xs text-blue-600 font-medium hover:underline"
+                  >
+                    경찰청 발급시스템
+                    <ExternalLink className="w-3 h-3" />
+                  </a>
+                </div>
+              </div>
+
+              <div className="bg-gray-100 rounded-lg p-3">
+                <p className="text-xs font-semibold text-gray-800 mb-2">2. 오프라인 방문 발급</p>
+                <p className="text-xs text-gray-700 mb-2">
+                  인터넷 이용이 어렵거나 즉시 발급이 필요한 경우 직접 방문할 수 있습니다.
+                </p>
+                <ul className="text-xs text-gray-700 space-y-1">
+                  <li>
+                    • <strong>방문 장소:</strong> 전국 경찰서 민원실
+                  </li>
+                  <li>
+                    • <strong>준비물:</strong> 신분증 (주민등록증, 운전면허증, 여권 중 1개)
+                  </li>
+                </ul>
+                <div className="mt-2 p-2 bg-yellow-50 rounded border border-yellow-200">
+                  <p className="text-xs text-yellow-800">
+                    <strong>⚠️ 주의:</strong> 파출소나 지구대에서는 발급 불가, 반드시{' '}
+                    <strong>경찰서 민원실</strong>을 방문해야 합니다.
+                  </p>
+                </div>
               </div>
             </div>
           </div>

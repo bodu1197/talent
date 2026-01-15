@@ -1,6 +1,6 @@
 {
   "statistics": {
-    "detectionDate": "2026-01-15T16:46:27.293Z",
+    "detectionDate": "2026-01-15T16:53:14.059Z",
     "formats": {
       "javascript": {
         "sources": {
@@ -5280,11 +5280,11 @@
             "lines": 333,
             "tokens": 2776,
             "sources": 1,
-            "clones": 0,
-            "duplicatedLines": 0,
-            "duplicatedTokens": 0,
-            "percentage": 0,
-            "percentageTokens": 0,
+            "clones": 2,
+            "duplicatedLines": 18,
+            "duplicatedTokens": 193,
+            "percentage": 5.41,
+            "percentageTokens": 6.95,
             "newDuplicatedLines": 0,
             "newClones": 0
           },
@@ -5325,14 +5325,14 @@
             "newClones": 0
           },
           "src/app/errands/mypage/helper/page.tsx": {
-            "lines": 310,
-            "tokens": 2505,
+            "lines": 376,
+            "tokens": 3151,
             "sources": 1,
-            "clones": 5,
-            "duplicatedLines": 49,
-            "duplicatedTokens": 487,
-            "percentage": 15.81,
-            "percentageTokens": 19.44,
+            "clones": 7,
+            "duplicatedLines": 67,
+            "duplicatedTokens": 680,
+            "percentage": 17.82,
+            "percentageTokens": 21.58,
             "newDuplicatedLines": 0,
             "newClones": 0
           },
@@ -8002,14 +8002,14 @@
           }
         },
         "total": {
-          "lines": 64965,
-          "tokens": 534205,
+          "lines": 65031,
+          "tokens": 534851,
           "sources": 359,
-          "clones": 172,
-          "duplicatedLines": 2267,
-          "duplicatedTokens": 18452,
-          "percentage": 3.49,
-          "percentageTokens": 3.45,
+          "clones": 174,
+          "duplicatedLines": 2285,
+          "duplicatedTokens": 18645,
+          "percentage": 3.51,
+          "percentageTokens": 3.49,
           "newDuplicatedLines": 0,
           "newClones": 0
         }
@@ -10460,14 +10460,14 @@
       }
     },
     "total": {
-      "lines": 118509,
-      "tokens": 972677,
+      "lines": 118575,
+      "tokens": 973323,
       "sources": 866,
-      "clones": 293,
-      "duplicatedLines": 4055,
-      "duplicatedTokens": 35619,
-      "percentage": 3.42,
-      "percentageTokens": 3.66,
+      "clones": 295,
+      "duplicatedLines": 4073,
+      "duplicatedTokens": 35812,
+      "percentage": 3.43,
+      "percentageTokens": 3.68,
       "newDuplicatedLines": 0,
       "newClones": 0
     }
@@ -14476,17 +14476,17 @@
       "tokens": 0,
       "firstFile": {
         "name": "src\\app\\errands\\mypage\\helper\\page.tsx",
-        "start": 42,
-        "end": 48,
+        "start": 45,
+        "end": 51,
         "startLoc": {
-          "line": 42,
+          "line": 45,
           "column": 8,
-          "position": 258
+          "position": 270
         },
         "endLoc": {
-          "line": 48,
+          "line": 51,
           "column": 5,
-          "position": 345
+          "position": 357
         }
       },
       "secondFile": {
@@ -14512,17 +14512,17 @@
       "tokens": 0,
       "firstFile": {
         "name": "src\\app\\errands\\mypage\\helper\\page.tsx",
-        "start": 71,
-        "end": 91,
+        "start": 74,
+        "end": 94,
         "startLoc": {
-          "line": 71,
+          "line": 74,
           "column": 6,
-          "position": 522
+          "position": 534
         },
         "endLoc": {
-          "line": 91,
+          "line": 94,
           "column": 30,
-          "position": 686
+          "position": 698
         }
       },
       "secondFile": {
@@ -14544,21 +14544,93 @@
     {
       "format": "tsx",
       "lines": 8,
+      "fragment": "\">\n                  <li>• 살인·성범죄: 20년 취업 제한</li>\n                  <li>• 절도 상습범: 18년 취업 제한</li>\n                  <li>• 마약류 범죄: 2~10년 취업 제한</li>\n                </ul>\n              </div>\n\n              <div className=\"bg-blue-50 rounded-lg p-3",
+      "tokens": 0,
+      "firstFile": {
+        "name": "src\\app\\errands\\mypage\\helper\\page.tsx",
+        "start": 180,
+        "end": 187,
+        "startLoc": {
+          "line": 180,
+          "column": 33,
+          "position": 1501
+        },
+        "endLoc": {
+          "line": 187,
+          "column": 26,
+          "position": 1585
+        }
+      },
+      "secondFile": {
+        "name": "src\\app\\errands\\register\\guide\\page.tsx",
+        "start": 198,
+        "end": 205,
+        "startLoc": {
+          "line": 198,
+          "column": 32,
+          "position": 1461
+        },
+        "endLoc": {
+          "line": 205,
+          "column": 30,
+          "position": 1545
+        }
+      }
+    },
+    {
+      "format": "tsx",
+      "lines": 12,
+      "fragment": "\">\n                  <li>1. 정부24 접속</li>\n                  <li>2. &quot;범죄경력회보서&quot; 검색</li>\n                  <li>3. &quot;취업용&quot; 선택</li>\n                  <li>4. 성범죄경력 조회 포함 체크</li>\n                  <li>5. 무료 발급 완료</li>\n                </ol>\n                <a\n                  href=\"https://www.gov.kr\"\n                  target=\"_blank\"\n                  rel=\"noopener noreferrer\"\n                  className=\"inline-flex items-center gap-1 text-xs text-blue-600 font-medium hover:underline",
+      "tokens": 0,
+      "firstFile": {
+        "name": "src\\app\\errands\\mypage\\helper\\page.tsx",
+        "start": 189,
+        "end": 200,
+        "startLoc": {
+          "line": 189,
+          "column": 39,
+          "position": 1614
+        },
+        "endLoc": {
+          "line": 200,
+          "column": 81,
+          "position": 1723
+        }
+      },
+      "secondFile": {
+        "name": "src\\app\\errands\\register\\guide\\page.tsx",
+        "start": 207,
+        "end": 218,
+        "startLoc": {
+          "line": 207,
+          "column": 32,
+          "position": 1574
+        },
+        "endLoc": {
+          "line": 218,
+          "column": 90,
+          "position": 1683
+        }
+      }
+    },
+    {
+      "format": "tsx",
+      "lines": 8,
       "fragment": "\">\n            <AlertCircle className=\"w-5 h-5 text-red-500 flex-shrink-0 mt-0.5\" />\n            <div className=\"flex-1\">\n              <p className=\"text-red-700 font-medium\">구독이 만료되었습니다</p>\n              <p className=\"text-red-600 text-sm\">심부름 지원을 계속하려면 구독을 갱신해주세요.</p>\n            </div>\n            <Link\n              href=\"/errands/mypage/helper/subscription",
       "tokens": 0,
       "firstFile": {
         "name": "src\\app\\errands\\mypage\\helper\\page.tsx",
-        "start": 158,
-        "end": 165,
+        "start": 224,
+        "end": 231,
         "startLoc": {
-          "line": 158,
+          "line": 224,
           "column": 75,
-          "position": 1231
+          "position": 1877
         },
         "endLoc": {
-          "line": 165,
+          "line": 231,
           "column": 36,
-          "position": 1310
+          "position": 1956
         }
       },
       "secondFile": {
@@ -14584,17 +14656,17 @@
       "tokens": 0,
       "firstFile": {
         "name": "src\\app\\errands\\mypage\\helper\\page.tsx",
-        "start": 231,
-        "end": 238,
+        "start": 297,
+        "end": 304,
         "startLoc": {
-          "line": 231,
+          "line": 297,
           "column": 4,
-          "position": 1845
+          "position": 2491
         },
         "endLoc": {
-          "line": 238,
+          "line": 304,
           "column": 2,
-          "position": 1916
+          "position": 2562
         }
       },
       "secondFile": {
@@ -14620,17 +14692,17 @@
       "tokens": 0,
       "firstFile": {
         "name": "src\\app\\errands\\mypage\\helper\\page.tsx",
-        "start": 238,
-        "end": 247,
+        "start": 304,
+        "end": 313,
         "startLoc": {
-          "line": 238,
+          "line": 304,
           "column": 2,
-          "position": 1926
+          "position": 2572
         },
         "endLoc": {
-          "line": 247,
+          "line": 313,
           "column": 2,
-          "position": 2012
+          "position": 2658
         }
       },
       "secondFile": {
