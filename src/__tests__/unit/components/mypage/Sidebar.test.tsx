@@ -20,9 +20,13 @@ vi.mock('next/link', () => ({
 }));
 
 // Mock next/navigation
-let mockPathname = '/mypage/seller/dashboard';
+// Mock next/navigation
+const { mockPathname } = vi.hoisted(() => ({
+  mockPathname: { value: '/mypage/seller/dashboard' },
+}));
+
 vi.mock('next/navigation', () => ({
-  usePathname: () => mockPathname,
+  usePathname: () => mockPathname.value,
 }));
 
 // Mock ProfileImage
@@ -33,7 +37,7 @@ vi.mock('@/components/common/ProfileImage', () => ({
 describe('Sidebar', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    mockPathname = '/mypage/seller/dashboard';
+    mockPathname.value = '/mypage/seller/dashboard';
   });
 
   describe('전문가 모드', () => {
@@ -98,7 +102,7 @@ describe('Sidebar', () => {
     const profileData = { name: '김철수', profile_image: null };
 
     it('구매자 사이드바를 렌더링한다', () => {
-      mockPathname = '/mypage/buyer/dashboard';
+      mockPathname.value = '/mypage/buyer/dashboard';
       render(<Sidebar mode="buyer" profileData={profileData} />);
 
       expect(screen.getByText('구매 대시보드')).toBeInTheDocument();
@@ -107,7 +111,7 @@ describe('Sidebar', () => {
     });
 
     it('프로필 정보를 표시한다', () => {
-      mockPathname = '/mypage/buyer/dashboard';
+      mockPathname.value = '/mypage/buyer/dashboard';
       render(<Sidebar mode="buyer" profileData={profileData} />);
 
       // 이름이 여러 곳에 나타날 수 있음
@@ -117,14 +121,14 @@ describe('Sidebar', () => {
     });
 
     it('전문가 페이지 전환 버튼을 표시한다', () => {
-      mockPathname = '/mypage/buyer/dashboard';
+      mockPathname.value = '/mypage/buyer/dashboard';
       render(<Sidebar mode="buyer" profileData={profileData} />);
 
       expect(screen.getByText('전문가')).toBeInTheDocument();
     });
 
     it('주문 내역 하위 메뉴가 확장된다', () => {
-      mockPathname = '/mypage/buyer/dashboard';
+      mockPathname.value = '/mypage/buyer/dashboard';
       render(<Sidebar mode="buyer" profileData={profileData} />);
 
       const orderButton = screen.getByRole('button', { name: /주문 내역/ });
@@ -158,7 +162,7 @@ describe('Sidebar', () => {
     });
 
     it('현재 경로와 일치하는 메뉴가 활성화된다', () => {
-      mockPathname = '/mypage/seller/dashboard';
+      mockPathname.value = '/mypage/seller/dashboard';
       render(<Sidebar mode="seller" profileData={null} />);
 
       const dashboardLink = screen.getByRole('link', { name: '판매 대시보드' });

@@ -56,6 +56,31 @@ const nextConfig = {
         port: '',
         pathname: '/**',
       },
+      // SNS 로그인 프로필 이미지
+      {
+        protocol: 'https',
+        hostname: 'lh3.googleusercontent.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'k.kakaocdn.net',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'img1.kakaocdn.net',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'phinf.pstatic.net',
+        port: '',
+        pathname: '/**',
+      },
     ],
   },
   // 서버 전용 패키지 (클라이언트 번들에서 제외) - Next.js 16+

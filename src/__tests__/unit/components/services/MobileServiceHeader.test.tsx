@@ -3,7 +3,11 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import MobileServiceHeader from '@/components/services/MobileServiceHeader';
 
 // Mock next/navigation
-const mockBack = vi.fn();
+// Mock next/navigation
+const { mockBack } = vi.hoisted(() => ({
+  mockBack: vi.fn(),
+}));
+
 vi.mock('next/navigation', () => ({
   useRouter: () => ({
     back: mockBack,

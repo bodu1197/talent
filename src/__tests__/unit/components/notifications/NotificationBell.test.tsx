@@ -1,5 +1,6 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { useAuth } from '@/components/providers/AuthProvider';
 import NotificationBell from '@/components/notifications/NotificationBell';
 
 // Mock next/link
@@ -20,10 +21,9 @@ vi.mock('next/link', () => ({
 }));
 
 // Mock useAuth
-const mockUser = { id: 'user-123', email: 'test@example.com' };
-const mockUseAuth = vi.fn();
+// Mock useAuth
 vi.mock('@/components/providers/AuthProvider', () => ({
-  useAuth: () => mockUseAuth(),
+  useAuth: vi.fn(),
 }));
 
 // Mock NotificationProvider
@@ -94,11 +94,11 @@ vi.mock('@/lib/supabase/client', () => ({
 describe('NotificationBell', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    mockUseAuth.mockReturnValue({ user: mockUser });
+    vi.mocked(useAuth).mockReturnValue({ user: { id: 'user-123', email: 'test@example.com' } });
   });
 
   it('비로그인 상태에서는 아무것도 렌더링하지 않는다', () => {
-    mockUseAuth.mockReturnValue({ user: null });
+    vi.mocked(useAuth).mockReturnValue({ user: null });
 
     const { container } = render(<NotificationBell />);
 
