@@ -158,8 +158,8 @@ export default function ChatRoomList({
         <div className="relative">
           <input
             type="text"
-            id="chat-search"
-            name="chat-search"
+            id={isMobile ? 'chat-search-mobile' : 'chat-search-desktop'}
+            name={isMobile ? 'chat-search-mobile' : 'chat-search-desktop'}
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
             placeholder="이름, 대화 내용, 서비스명 검색"
