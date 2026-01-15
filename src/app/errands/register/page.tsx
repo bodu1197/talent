@@ -601,7 +601,7 @@ export default function ErrandRiderRegisterPage() {
                   <ol className="text-xs text-blue-700 space-y-1 mb-3">
                     <li>1. 정부24 접속</li>
                     <li>2. &quot;범죄경력회보서&quot; 검색</li>
-                    <li>3. &quot;본인용&quot; 선택</li>
+                    <li>3. &quot;취업용&quot; 선택</li>
                     <li>4. 성범죄경력 조회 포함 체크</li>
                     <li>5. 무료 발급 완료</li>
                   </ol>
@@ -773,12 +773,12 @@ export default function ErrandRiderRegisterPage() {
                   범죄경력회보서 (성범죄경력 포함) <span className="text-red-500">*</span>
                 </label>
                 <p className="text-xs text-gray-500 mb-2">
-                  정부24에서 발급 (본인용, 발급일 3개월 이내)
+                  정부24에서 발급 (취업용, 발급일 3개월 이내)
                 </p>
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-2">
                   <p className="text-xs text-blue-700">
                     <strong>발급 방법:</strong> 정부24 → &quot;범죄경력회보서&quot; 검색 →
-                    &quot;본인용&quot; 선택 → 성범죄경력 조회 포함 체크
+                    &quot;취업용&quot; 선택 → 성범죄경력 조회 포함 체크
                   </p>
                 </div>
                 {formData.criminal_record.file ? (

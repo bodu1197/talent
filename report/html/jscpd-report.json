@@ -1,6 +1,6 @@
 {
   "statistics": {
-    "detectionDate": "2026-01-15T16:11:17.434Z",
+    "detectionDate": "2026-01-15T16:43:14.734Z",
     "formats": {
       "javascript": {
         "sources": {
@@ -1794,7 +1794,7 @@
           },
           "src/app/chat/components/ChatRoomList.tsx": {
             "lines": 144,
-            "tokens": 1186,
+            "tokens": 1200,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -3679,7 +3679,7 @@
         },
         "total": {
           "lines": 25618,
-          "tokens": 209013,
+          "tokens": 209027,
           "sources": 306,
           "clones": 8,
           "duplicatedLines": 508,
@@ -4377,14 +4377,14 @@
             "newClones": 0
           },
           "src/__tests__/unit/components/notifications/NotificationBell.test.tsx": {
-            "lines": 161,
-            "tokens": 1597,
+            "lines": 180,
+            "tokens": 1736,
             "sources": 1,
             "clones": 2,
             "duplicatedLines": 32,
             "duplicatedTokens": 235,
-            "percentage": 19.88,
-            "percentageTokens": 14.72,
+            "percentage": 17.78,
+            "percentageTokens": 13.54,
             "newDuplicatedLines": 0,
             "newClones": 0
           },
@@ -5325,14 +5325,14 @@
             "newClones": 0
           },
           "src/app/errands/mypage/helper/page.tsx": {
-            "lines": 313,
-            "tokens": 2527,
+            "lines": 310,
+            "tokens": 2505,
             "sources": 1,
             "clones": 5,
             "duplicatedLines": 49,
             "duplicatedTokens": 487,
-            "percentage": 15.65,
-            "percentageTokens": 19.27,
+            "percentage": 15.81,
+            "percentageTokens": 19.44,
             "newDuplicatedLines": 0,
             "newClones": 0
           },
@@ -5794,7 +5794,7 @@
           },
           "src/app/chat/components/ChatRoomList.tsx": {
             "lines": 189,
-            "tokens": 1506,
+            "tokens": 1520,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -6849,14 +6849,14 @@
             "newClones": 0
           },
           "src/components/mypage/MobileMyPageNav.tsx": {
-            "lines": 152,
-            "tokens": 1455,
+            "lines": 153,
+            "tokens": 1487,
             "sources": 1,
-            "clones": 2,
-            "duplicatedLines": 10,
-            "duplicatedTokens": 164,
-            "percentage": 6.58,
-            "percentageTokens": 11.27,
+            "clones": 4,
+            "duplicatedLines": 20,
+            "duplicatedTokens": 306,
+            "percentage": 13.07,
+            "percentageTokens": 20.58,
             "newDuplicatedLines": 0,
             "newClones": 0
           },
@@ -8002,14 +8002,14 @@
           }
         },
         "total": {
-          "lines": 64948,
-          "tokens": 534042,
+          "lines": 64965,
+          "tokens": 534205,
           "sources": 359,
-          "clones": 171,
-          "duplicatedLines": 2262,
-          "duplicatedTokens": 18381,
-          "percentage": 3.48,
-          "percentageTokens": 3.44,
+          "clones": 172,
+          "duplicatedLines": 2267,
+          "duplicatedTokens": 18452,
+          "percentage": 3.49,
+          "percentageTokens": 3.45,
           "newDuplicatedLines": 0,
           "newClones": 0
         }
@@ -10460,12 +10460,12 @@
       }
     },
     "total": {
-      "lines": 118492,
-      "tokens": 972500,
+      "lines": 118509,
+      "tokens": 972677,
       "sources": 866,
-      "clones": 292,
-      "duplicatedLines": 4050,
-      "duplicatedTokens": 35548,
+      "clones": 293,
+      "duplicatedLines": 4055,
+      "duplicatedTokens": 35619,
       "percentage": 3.42,
       "percentageTokens": 3.66,
       "newDuplicatedLines": 0,
@@ -14548,17 +14548,17 @@
       "tokens": 0,
       "firstFile": {
         "name": "src\\app\\errands\\mypage\\helper\\page.tsx",
-        "start": 161,
-        "end": 168,
+        "start": 158,
+        "end": 165,
         "startLoc": {
-          "line": 161,
+          "line": 158,
           "column": 75,
-          "position": 1253
+          "position": 1231
         },
         "endLoc": {
-          "line": 168,
+          "line": 165,
           "column": 36,
-          "position": 1332
+          "position": 1310
         }
       },
       "secondFile": {
@@ -14584,17 +14584,17 @@
       "tokens": 0,
       "firstFile": {
         "name": "src\\app\\errands\\mypage\\helper\\page.tsx",
-        "start": 234,
-        "end": 241,
+        "start": 231,
+        "end": 238,
         "startLoc": {
-          "line": 234,
+          "line": 231,
           "column": 4,
-          "position": 1867
+          "position": 1845
         },
         "endLoc": {
-          "line": 241,
+          "line": 238,
           "column": 2,
-          "position": 1938
+          "position": 1916
         }
       },
       "secondFile": {
@@ -14620,17 +14620,17 @@
       "tokens": 0,
       "firstFile": {
         "name": "src\\app\\errands\\mypage\\helper\\page.tsx",
-        "start": 241,
-        "end": 250,
+        "start": 238,
+        "end": 247,
         "startLoc": {
-          "line": 241,
+          "line": 238,
           "column": 2,
-          "position": 1948
+          "position": 1926
         },
         "endLoc": {
-          "line": 250,
+          "line": 247,
           "column": 2,
-          "position": 2034
+          "position": 2012
         }
       },
       "secondFile": {
@@ -20046,6 +20046,42 @@
           "line": 40,
           "column": 16,
           "position": 387
+        }
+      }
+    },
+    {
+      "format": "tsx",
+      "lines": 6,
+      "fragment": "},\n  { label: '알림', href: '/mypage/notifications', icon: <Bell className=\"w-6 h-6\" /> },\n  { label: '설정', href: '/mypage/settings', icon: <Settings className=\"w-6 h-6\" /> },\n];\n\ninterface",
+      "tokens": 0,
+      "firstFile": {
+        "name": "src\\components\\mypage\\MobileMyPageNav.tsx",
+        "start": 78,
+        "end": 83,
+        "startLoc": {
+          "line": 78,
+          "column": 3,
+          "position": 917
+        },
+        "endLoc": {
+          "line": 83,
+          "column": 10,
+          "position": 988
+        }
+      },
+      "secondFile": {
+        "name": "src\\components\\mypage\\MobileMyPageNav.tsx",
+        "start": 35,
+        "end": 40,
+        "startLoc": {
+          "line": 35,
+          "column": 2,
+          "position": 314
+        },
+        "endLoc": {
+          "line": 40,
+          "column": 6,
+          "position": 385
         }
       }
     },

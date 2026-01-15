@@ -284,14 +284,14 @@ export default function HelperGuidePage() {
               <li className="flex items-start gap-2">
                 <CheckCircle className="w-3.5 h-3.5 flex-shrink-0 mt-0.5" />
                 <span>
-                  <strong>범죄경력회보서:</strong> 정부24(gov.kr) → 범죄경력회보서 신청 (본인용,
+                  <strong>범죄경력회보서:</strong> 정부24(gov.kr) → 범죄경력회보서 신청 (취업용,
                   무료)
                 </span>
               </li>
               <li className="flex items-start gap-2">
                 <CheckCircle className="w-3.5 h-3.5 flex-shrink-0 mt-0.5" />
                 <span>
-                  <strong>성범죄경력조회서:</strong> 정부24(gov.kr) → 성범죄경력조회 신청 (본인용,
+                  <strong>성범죄경력조회서:</strong> 정부24(gov.kr) → 성범죄경력조회 신청 (취업용,
                   무료)
                 </span>
               </li>

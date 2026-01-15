@@ -207,7 +207,7 @@ export default function RiderRegisterGuidePage() {
                 <ol className="text-sm text-gray-300 space-y-1">
                   <li>1. 정부24 접속</li>
                   <li>2. &quot;범죄경력회보서&quot; 검색</li>
-                  <li>3. &quot;본인용&quot; 선택</li>
+                  <li>3. &quot;취업용&quot; 선택</li>
                   <li>4. 성범죄경력 조회 포함 체크</li>
                   <li>5. 무료 발급 완료</li>
                 </ol>
