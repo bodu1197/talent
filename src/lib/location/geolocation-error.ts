@@ -48,7 +48,7 @@ interface DeviceInfo {
  * 현재 디바이스/브라우저 정보 감지
  */
 function getDeviceInfo(): DeviceInfo {
-  if (typeof globalThis.window === 'undefined' || typeof navigator === 'undefined') {
+  if (globalThis.window === undefined || typeof navigator === 'undefined') {
     return {
       isMobile: false,
       isIOS: false,
@@ -81,27 +81,35 @@ function getDeviceInfo(): DeviceInfo {
  * 권한 거부 오류 상세 정보 생성
  */
 function getPermissionDeniedDetails(device: DeviceInfo): GeolocationErrorDetails {
-  const solutions: string[] = [];
+  let solutions: string[];
 
   if (device.isIOS) {
-    solutions.push('설정 → Safari → 위치 → 허용으로 변경');
-    solutions.push('설정 → 개인 정보 보호 및 보안 → 위치 서비스 → Safari 웹사이트 → 허용');
+    solutions = [
+      '설정 → Safari → 위치 → 허용으로 변경',
+      '설정 → 개인 정보 보호 및 보안 → 위치 서비스 → Safari 웹사이트 → 허용',
+    ];
   } else if (device.isAndroid) {
-    solutions.push('설정 → 앱 → Chrome → 권한 → 위치 → 허용');
-    solutions.push('주소창 왼쪽 🔒 아이콘 → 사이트 설정 → 위치 → 허용');
+    solutions = [
+      '설정 → 앱 → Chrome → 권한 → 위치 → 허용',
+      '주소창 왼쪽 🔒 아이콘 → 사이트 설정 → 위치 → 허용',
+    ];
   } else if (device.isChrome) {
-    solutions.push('주소창 왼쪽 🔒 아이콘 클릭 → 사이트 설정 → 위치 → 허용');
-    solutions.push('chrome://settings/content/location 에서 차단 목록 확인');
-    solutions.push('Windows 설정 → 개인 정보 → 위치 → 위치 서비스 켜기');
+    solutions = [
+      '주소창 왼쪽 🔒 아이콘 클릭 → 사이트 설정 → 위치 → 허용',
+      'chrome://settings/content/location 에서 차단 목록 확인',
+      'Windows 설정 → 개인 정보 → 위치 → 위치 서비스 켜기',
+    ];
   } else if (device.isFirefox) {
-    solutions.push('주소창 왼쪽 🔒 아이콘 → 연결 안전 → 추가 정보 → 권한 → 위치 허용');
+    solutions = ['주소창 왼쪽 🔒 아이콘 → 연결 안전 → 추가 정보 → 권한 → 위치 허용'];
   } else if (device.isSafari) {
-    solutions.push('Safari → 환경설정 → 웹사이트 → 위치 → 해당 사이트 허용');
+    solutions = ['Safari → 환경설정 → 웹사이트 → 위치 → 해당 사이트 허용'];
   } else if (device.isEdge) {
-    solutions.push('주소창 왼쪽 🔒 아이콘 → 사이트 권한 → 위치 → 허용');
-    solutions.push('edge://settings/content/location 에서 설정 확인');
+    solutions = [
+      '주소창 왼쪽 🔒 아이콘 → 사이트 권한 → 위치 → 허용',
+      'edge://settings/content/location 에서 설정 확인',
+    ];
   } else {
-    solutions.push('브라우저 설정에서 위치 권한을 허용해주세요');
+    solutions = ['브라우저 설정에서 위치 권한을 허용해주세요'];
   }
 
   solutions.push('페이지 새로고침 후 위치 권한 팝업에서 "허용" 클릭');
@@ -122,19 +130,23 @@ function getPermissionDeniedDetails(device: DeviceInfo): GeolocationErrorDetails
  * 위치 정보 없음 오류 상세 정보 생성
  */
 function getPositionUnavailableDetails(device: DeviceInfo): GeolocationErrorDetails {
-  const solutions: string[] = [];
+  let solutions: string[];
 
   if (device.isMobile) {
-    solutions.push('GPS를 켜주세요 (설정 → 위치 → 켜기)');
-    solutions.push('실외로 이동하면 GPS 수신이 개선됩니다');
-    solutions.push('Wi-Fi를 켜면 실내에서도 위치 정확도가 향상됩니다');
+    solutions = [
+      'GPS를 켜주세요 (설정 → 위치 → 켜기)',
+      '실외로 이동하면 GPS 수신이 개선됩니다',
+      'Wi-Fi를 켜면 실내에서도 위치 정확도가 향상됩니다',
+      '잠시 후 다시 시도해주세요',
+    ];
   } else {
-    solutions.push('Windows 설정 → 개인 정보 → 위치 → 위치 서비스 켜기');
-    solutions.push('Wi-Fi가 연결되어 있으면 위치 정확도가 향상됩니다');
-    solutions.push('VPN을 사용 중이라면 위치 정보에 영향을 줄 수 있습니다');
+    solutions = [
+      'Windows 설정 → 개인 정보 → 위치 → 위치 서비스 켜기',
+      'Wi-Fi가 연결되어 있으면 위치 정확도가 향상됩니다',
+      'VPN을 사용 중이라면 위치 정보에 영향을 줄 수 있습니다',
+      '잠시 후 다시 시도해주세요',
+    ];
   }
-
-  solutions.push('잠시 후 다시 시도해주세요');
 
   return {
     code: GeolocationErrorCode.POSITION_UNAVAILABLE,
@@ -152,18 +164,23 @@ function getPositionUnavailableDetails(device: DeviceInfo): GeolocationErrorDeta
  * 시간 초과 오류 상세 정보 생성
  */
 function getTimeoutDetails(device: DeviceInfo): GeolocationErrorDetails {
-  const solutions: string[] = [];
+  let solutions: string[];
 
   if (device.isMobile) {
-    solutions.push('GPS 신호가 약할 수 있습니다. 실외로 이동해보세요');
-    solutions.push('설정에서 "고정밀 위치" 또는 "높은 정확도"를 활성화해보세요');
+    solutions = [
+      'GPS 신호가 약할 수 있습니다. 실외로 이동해보세요',
+      '설정에서 "고정밀 위치" 또는 "높은 정확도"를 활성화해보세요',
+      '페이지를 새로고침하고 다시 시도해주세요',
+      '잠시 후 다시 시도해주세요',
+    ];
   } else {
-    solutions.push('네트워크 연결을 확인해주세요');
-    solutions.push('방화벽이나 보안 프로그램이 위치 서비스를 차단할 수 있습니다');
+    solutions = [
+      '네트워크 연결을 확인해주세요',
+      '방화벽이나 보안 프로그램이 위치 서비스를 차단할 수 있습니다',
+      '페이지를 새로고침하고 다시 시도해주세요',
+      '잠시 후 다시 시도해주세요',
+    ];
   }
-
-  solutions.push('페이지를 새로고침하고 다시 시도해주세요');
-  solutions.push('잠시 후 다시 시도해주세요');
 
   return {
     code: GeolocationErrorCode.TIMEOUT,
@@ -299,7 +316,7 @@ export function checkGeolocationAvailability(): {
   reason?: string;
   canRetry: boolean;
 } {
-  if (typeof globalThis.window === 'undefined') {
+  if (globalThis.window === undefined) {
     return {
       available: false,
       reason: '서버 환경에서는 위치 기능을 사용할 수 없습니다',
