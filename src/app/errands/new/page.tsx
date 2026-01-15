@@ -904,6 +904,8 @@ export default function NewErrandPage() {
                     </button>
                     {shoppingLocation.address && (
                       <input
+                        id="shopping-location-detail"
+                        name="shopping-location-detail"
                         type="text"
                         value={shoppingLocation.detail ?? ''}
                         onChange={(e) =>
@@ -930,6 +932,8 @@ export default function NewErrandPage() {
                     {shoppingItems.map((item, index) => (
                       <div key={item.itemId} className="flex gap-2">
                         <input
+                          id={`shopping-item-name-${index}`}
+                          name={`shopping-item-name-${index}`}
                           type="text"
                           value={item.name}
                           onChange={(e) => updateShoppingItem(index, 'name', e.target.value)}
@@ -937,6 +941,8 @@ export default function NewErrandPage() {
                           className="flex-1 px-3 py-2.5 border border-gray-200 rounded-lg text-sm"
                         />
                         <input
+                          id={`shopping-item-quantity-${index}`}
+                          name={`shopping-item-quantity-${index}`}
                           type="number"
                           value={item.quantity}
                           onChange={(e) =>
