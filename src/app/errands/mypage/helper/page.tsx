@@ -130,10 +130,7 @@ export default function ErrandHelperDashboard() {
           <div className="bg-white rounded-xl p-8 text-center shadow-sm">
             <Bike className="w-16 h-16 mx-auto text-blue-500 mb-4" />
             <h2 className="text-xl font-bold text-gray-900 mb-2">라이더로 등록하세요!</h2>
-            <p className="text-gray-600 mb-6">
-              심부름을 수행하고 수익을 올려보세요.
-              <br />첫 달은 무료로 체험할 수 있습니다.
-            </p>
+            <p className="text-gray-600 mb-6">심부름을 수행하고 수익을 올려보세요.</p>
             <Link
               href="/errands/register"
               className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors font-medium"
