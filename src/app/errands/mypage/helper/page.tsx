@@ -15,6 +15,9 @@ import {
   TrendingUp,
   CreditCard,
   CheckCircle,
+  FileText,
+  ExternalLink,
+  Shield,
 } from 'lucide-react';
 import HelperLocationTracker from '@/components/errands/HelperLocationTracker';
 import HelperGuideSection from '@/components/errands/HelperGuideSection';
@@ -126,7 +129,7 @@ export default function ErrandHelperDashboard() {
   if (!helperProfile) {
     return (
       <ErrandMypageLayout mode="helper">
-        <div className="p-4 lg:p-0">
+        <div className="p-4 lg:p-0 space-y-4">
           <div className="bg-white rounded-xl p-8 text-center shadow-sm">
             <Bike className="w-16 h-16 mx-auto text-blue-500 mb-4" />
             <h2 className="text-xl font-bold text-gray-900 mb-2">라이더로 등록하세요!</h2>
@@ -138,6 +141,69 @@ export default function ErrandHelperDashboard() {
               라이더 등록하기
               <ChevronRight className="w-4 h-4" />
             </Link>
+          </div>
+
+          {/* 제출 서류 안내 */}
+          <div className="bg-white rounded-xl p-6 shadow-sm">
+            <div className="flex items-center gap-2 mb-4">
+              <FileText className="w-5 h-5 text-gray-700" />
+              <h3 className="font-bold text-gray-900">제출 서류 안내</h3>
+            </div>
+            <ul className="space-y-2 text-sm text-gray-700 mb-4">
+              <li className="flex items-start gap-2">
+                <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
+                <span>신분증 사본 (주민등록증, 운전면허증, 여권 중 1개)</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
+                <span>본인 얼굴 사진 (셀카)</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
+                <span>범죄경력회보서 (정부24에서 무료 발급)</span>
+              </li>
+            </ul>
+
+            {/* 범죄경력회보서 상세 안내 */}
+            <div className="bg-gray-50 rounded-lg p-4">
+              <div className="flex items-center gap-2 mb-3">
+                <Shield className="w-4 h-4 text-red-500" />
+                <p className="text-sm font-semibold text-gray-900">범죄경력회보서 제출 안내</p>
+              </div>
+              <p className="text-xs text-gray-600 mb-3">
+                2025년 1월 17일부터 시행된 생활물류서비스산업발전법에 따라 범죄경력회보서 제출이
+                의무화되었습니다.
+              </p>
+
+              <div className="bg-red-50 rounded-lg p-3 mb-3">
+                <p className="text-xs font-medium text-red-800 mb-1">취업 제한 사유</p>
+                <ul className="text-xs text-red-700 space-y-0.5">
+                  <li>• 살인·성범죄: 20년 취업 제한</li>
+                  <li>• 절도 상습범: 18년 취업 제한</li>
+                  <li>• 마약류 범죄: 2~10년 취업 제한</li>
+                </ul>
+              </div>
+
+              <div className="bg-blue-50 rounded-lg p-3">
+                <p className="text-xs font-medium text-blue-800 mb-2">발급 방법</p>
+                <ol className="text-xs text-blue-700 space-y-0.5 mb-2">
+                  <li>1. 정부24 접속</li>
+                  <li>2. &quot;범죄경력회보서&quot; 검색</li>
+                  <li>3. &quot;취업용&quot; 선택</li>
+                  <li>4. 성범죄경력 조회 포함 체크</li>
+                  <li>5. 무료 발급 완료</li>
+                </ol>
+                <a
+                  href="https://www.gov.kr"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 text-xs text-blue-600 font-medium hover:underline"
+                >
+                  정부24 바로가기
+                  <ExternalLink className="w-3 h-3" />
+                </a>
+              </div>
+            </div>
           </div>
         </div>
       </ErrandMypageLayout>
