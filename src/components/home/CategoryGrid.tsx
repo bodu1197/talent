@@ -16,7 +16,6 @@ export default async function CategoryGrid() {
   const initialVisibleCount = 11;
   const categoriesInFirstRow = topLevelCategories.slice(0, initialVisibleCount);
   const remainingCategories = topLevelCategories.slice(initialVisibleCount);
-  const hasMoreCategories = topLevelCategories.length > initialVisibleCount;
 
   const brightColors = [
     'text-red-500',
@@ -87,7 +86,6 @@ export default async function CategoryGrid() {
         <CategoryGridClient
           categoriesInFirstRow={categoriesInFirstRow}
           remainingCategories={remainingCategories}
-          hasMoreCategories={hasMoreCategories}
           brightColors={brightColors}
         />
       </div>

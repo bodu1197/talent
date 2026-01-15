@@ -21,10 +21,7 @@ export async function POST(request: Request) {
     }
 
     const supabase = createServiceRoleClient();
-    const results: string[] = [];
-
-    // 1. 위치 컬럼 추가
-    results.push('1. 위치 컬럼 추가 시도...');
+    const results: string[] = ['1. 위치 컬럼 추가 시도...'];
 
     // 개별 컬럼 추가 시도
     const columns = [

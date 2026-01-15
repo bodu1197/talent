@@ -6,12 +6,12 @@ import { requireAuthWithRateLimit } from '@/lib/api/auth';
 import { verifyOrderBuyer } from '@/lib/api/ownership';
 
 // 구매확정 가능한 상태들
-const CONFIRMABLE_STATUSES = [
+const CONFIRMABLE_STATUSES = new Set([
   'in_progress',
   'delivered',
   'revision_requested',
   'revision_completed',
-];
+]);
 
 // POST /api/orders/[id]/confirm - 구매확정 (플랫폼 에스크로 - 정산 승인)
 export async function POST(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
@@ -39,7 +39,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     const order = orderResult.data!.order as any;
 
     // 구매확정 가능한 상태인지 확인
-    if (!CONFIRMABLE_STATUSES.includes(order.status)) {
+    if (!CONFIRMABLE_STATUSES.has(order.status)) {
       return NextResponse.json(
         {
           error: `현재 상태(${order.status})에서는 구매확정을 할 수 없습니다`,

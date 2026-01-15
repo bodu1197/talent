@@ -33,7 +33,6 @@ describe('CategoryGridClient', () => {
       <CategoryGridClient
         categoriesInFirstRow={mockCategories}
         remainingCategories={[]}
-        hasMoreCategories={false}
         brightColors={brightColors}
       />
     );
@@ -48,7 +47,6 @@ describe('CategoryGridClient', () => {
       <CategoryGridClient
         categoriesInFirstRow={mockCategories}
         remainingCategories={[]}
-        hasMoreCategories={false}
         brightColors={brightColors}
       />
     );
@@ -70,7 +68,6 @@ describe('CategoryGridClient', () => {
       <CategoryGridClient
         categoriesInFirstRow={mockCategories}
         remainingCategories={remainingCategories}
-        hasMoreCategories={true}
         brightColors={brightColors}
       />
     );
@@ -85,7 +82,6 @@ describe('CategoryGridClient', () => {
       <CategoryGridClient
         categoriesInFirstRow={mockCategories}
         remainingCategories={[]}
-        hasMoreCategories={false}
         brightColors={brightColors}
       />
     );
@@ -99,7 +95,6 @@ describe('CategoryGridClient', () => {
       <CategoryGridClient
         categoriesInFirstRow={mockCategories}
         remainingCategories={[]}
-        hasMoreCategories={false}
         brightColors={brightColors}
       />
     );
@@ -114,7 +109,6 @@ describe('CategoryGridClient', () => {
       <CategoryGridClient
         categoriesInFirstRow={[]}
         remainingCategories={[]}
-        hasMoreCategories={false}
         brightColors={brightColors}
       />
     );
@@ -130,7 +124,6 @@ describe('CategoryGridClient', () => {
       <CategoryGridClient
         categoriesInFirstRow={categoriesWithoutIcon}
         remainingCategories={[]}
-        hasMoreCategories={false}
         brightColors={brightColors}
       />
     );
@@ -152,7 +145,6 @@ describe('CategoryGridClient', () => {
       <CategoryGridClient
         categoriesInFirstRow={manyCategories}
         remainingCategories={[]}
-        hasMoreCategories={false}
         brightColors={brightColors}
       />
     );

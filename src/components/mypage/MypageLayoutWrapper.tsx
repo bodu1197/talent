@@ -152,18 +152,18 @@ export default function MypageLayoutWrapper({
   // 역할 변경 핸들러
   const handleRoleChange = (role: 'buyer' | 'seller' | 'helper') => {
     if (role === 'seller') {
-      // 판매자 등록이 안 되어 있으면 등록 페이지로
-      if (!isRegisteredSeller) {
-        router.push('/mypage/seller/register');
-      } else {
+      // 판매자 등록 여부에 따라 페이지 이동
+      if (isRegisteredSeller) {
         router.push('/mypage/seller/dashboard');
+      } else {
+        router.push('/mypage/seller/register');
       }
     } else if (role === 'helper') {
-      // 심부름꾼 등록이 안 되어 있으면 등록 페이지로
-      if (!isRegisteredHelper) {
-        router.push('/errands/register');
-      } else {
+      // 심부름꾼 등록 여부에 따라 페이지 이동
+      if (isRegisteredHelper) {
         router.push('/mypage/helper/dashboard');
+      } else {
+        router.push('/errands/register');
       }
     } else {
       router.push('/mypage/buyer/dashboard');

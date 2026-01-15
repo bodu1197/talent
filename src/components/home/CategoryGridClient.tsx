@@ -14,7 +14,6 @@ interface Category {
 interface Props {
   readonly categoriesInFirstRow: Category[];
   readonly remainingCategories: Category[];
-  readonly hasMoreCategories: boolean;
   readonly brightColors: string[];
 }
 

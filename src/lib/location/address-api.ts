@@ -177,7 +177,7 @@ export function extractRegion(address: string): string {
   // "서울특별시 강남구 역삼동" → "강남구"
   // "경기도 성남시 분당구 정자동" → "분당구"
   // eslint-disable-next-line sonarjs/slow-regex -- 한글 주소 패턴 매칭에 필요
-  const match = address.match(/([가-힣]+[시군구])\s/);
+  const match = /([가-힣]+[시군구])\s/.exec(address);
   if (match) {
     // 시/군/구 중 구가 있으면 구 반환
     const parts = address.split(' ');

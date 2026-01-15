@@ -212,7 +212,7 @@ export default function SellerEarningsClient({
     const autoDate = new Date(autoConfirmAt);
     const diffTime = autoDate.getTime() - now.getTime();
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    return diffDays > 0 ? diffDays : 0;
+    return Math.max(diffDays, 0);
   };
 
   return (

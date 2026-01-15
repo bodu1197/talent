@@ -6,7 +6,7 @@ import { requireAuthWithRateLimit } from '@/lib/api/auth';
 import { verifyOrderBuyer } from '@/lib/api/ownership';
 
 // 취소 가능한 상태들
-const CANCELLABLE_STATUSES = ['pending_payment', 'paid', 'in_progress'];
+const CANCELLABLE_STATUSES = new Set(['pending_payment', 'paid', 'in_progress']);
 
 // PortOne 결제 취소 (환불) 처리
 async function cancelPaymentOnPortOne(
@@ -88,7 +88,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     }
 
     // 취소 가능한 상태인지 확인
-    if (!CANCELLABLE_STATUSES.includes(order.status)) {
+    if (!CANCELLABLE_STATUSES.has(order.status)) {
       return NextResponse.json(
         {
           error: `현재 상태(${order.status})에서는 취소할 수 없습니다`,

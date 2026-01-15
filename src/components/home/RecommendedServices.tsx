@@ -15,7 +15,7 @@ interface CategoryTab {
 }
 
 // 탭에서 제외할 카테고리 slug (내 주변의 프리미엄 전문가 6개 + 심부름)
-const EXCLUDED_CATEGORY_SLUGS = [
+const EXCLUDED_CATEGORY_SLUGS = new Set([
   'life-service', // 생활 서비스
   'event', // 이벤트
   'beauty-fashion', // 뷰티 · 패션
@@ -23,7 +23,7 @@ const EXCLUDED_CATEGORY_SLUGS = [
   'counseling-coaching', // 상담 · 코칭
   'hobby-handmade', // 취미 · 핸드메이드
   'errands', // 심부름
-];
+]);
 
 export default async function RecommendedServices({ aiCategoryIds }: RecommendedServicesProps) {
   const supabase = await createClient();
@@ -37,7 +37,7 @@ export default async function RecommendedServices({ aiCategoryIds }: Recommended
     .order('display_order');
 
   const filteredCategories = (categoriesData || []).filter(
-    (cat) => !aiCategoryIds.includes(cat.id) && !EXCLUDED_CATEGORY_SLUGS.includes(cat.slug)
+    (cat) => !aiCategoryIds.includes(cat.id) && !EXCLUDED_CATEGORY_SLUGS.has(cat.slug)
   );
 
   if (filteredCategories.length === 0) {

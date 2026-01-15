@@ -51,7 +51,7 @@ export default function ServiceTabs({
       icon: Store,
       service: 'market' as const,
       color: 'blue',
-      badge: !isRegisteredSeller ? '등록' : undefined,
+      badge: isRegisteredSeller ? undefined : '등록',
     },
     {
       id: 'errands-requester' as ServiceType,
@@ -68,7 +68,7 @@ export default function ServiceTabs({
       icon: Bike,
       service: 'errands' as const,
       color: 'orange',
-      badge: !isRegisteredHelper ? '등록' : undefined,
+      badge: isRegisteredHelper ? undefined : '등록',
     },
   ];
 

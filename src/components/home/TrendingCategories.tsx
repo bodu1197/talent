@@ -2,7 +2,7 @@ import { createServiceRoleClient } from '@/lib/supabase/server';
 import TrendingCategoriesClient from './TrendingCategoriesClient';
 
 // 제외할 카테고리 slug 목록 (심부름 + 프리미엄 전문가 섹션 6개)
-const EXCLUDED_CATEGORY_SLUGS = [
+const EXCLUDED_CATEGORY_SLUGS = new Set([
   'errands', // 심부름
   'life-service', // 생활 서비스
   'event', // 이벤트
@@ -10,7 +10,7 @@ const EXCLUDED_CATEGORY_SLUGS = [
   'custom-order', // 주문제작
   'counseling-coaching', // 상담/코칭
   'hobby-handmade', // 취미/핸드메이드
-];
+]);
 const DISPLAY_LIMIT = 14;
 
 interface Category {
@@ -134,7 +134,7 @@ async function fetchTrendingCategories() {
 
     // 오프라인 카테고리 제외하고 14개만 반환
     return resultWithRatio
-      .filter((cat) => !EXCLUDED_CATEGORY_SLUGS.includes(cat.slug))
+      .filter((cat) => !EXCLUDED_CATEGORY_SLUGS.has(cat.slug))
       .slice(0, DISPLAY_LIMIT);
   } catch {
     return [];
