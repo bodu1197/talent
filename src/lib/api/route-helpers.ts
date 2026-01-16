@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { requireAuth, requireAuthWithRateLimit, type AuthResult } from './auth';
 import type { Ratelimit } from '@upstash/ratelimit';
+import { logger } from '@/lib/logger';
 
 /**
  * Route handler types
