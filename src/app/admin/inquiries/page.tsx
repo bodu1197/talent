@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { Search, Eye, MessageSquare, Clock, CheckCircle, Loader2, X, Mail } from 'lucide-react';
 import { toast } from 'react-hot-toast';
+import { logger } from '@/lib/logger';
 
 interface Inquiry {
   id: string;
@@ -62,10 +63,10 @@ export default function AdminInquiriesPage() {
     if (error) {
       // 테이블이 없는 경우 404 오류 발생
       if (error.code === 'PGRST116' || error.message?.includes('does not exist')) {
-        console.warn('inquiries 테이블이 아직 생성되지 않았습니다.');
+        logger.warn('inquiries 테이블이 아직 생성되지 않았습니다.');
       } else {
         toast.error('문의를 불러오는데 실패했습니다.');
-        console.error(error);
+        logger.error('문의 로드 실패', error);
       }
       setInquiries([]);
     } else {
@@ -99,7 +100,7 @@ export default function AdminInquiriesPage() {
 
     if (error) {
       toast.error('답변 저장에 실패했습니다.');
-      console.error(error);
+      logger.error('답변 저장 실패', error);
     } else {
       toast.success('답변이 저장되었습니다.');
       setSelectedInquiry(null);

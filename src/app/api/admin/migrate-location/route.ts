@@ -12,11 +12,9 @@ function createServiceRoleClient() {
 // 라이더 위치 추적용 DB 마이그레이션 실행
 export async function POST(request: Request) {
   try {
-    // 간단한 보안 체크 (실제 환경에서는 더 강력한 인증 필요)
-    const { searchParams } = new URL(request.url);
-    const secret = searchParams.get('secret');
-
-    if (secret !== 'dolpagu-migration-2024') {
+    // CRON_SECRET을 사용한 보안 체크
+    const authHeader = request.headers.get('authorization');
+    if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 

@@ -3,7 +3,7 @@ import { logger } from '@/lib/logger';
 
 // 도로명주소 API 설정
 // 참고: https://www.juso.go.kr/addrlink/devGuide.do
-const JUSO_API_KEY = 'devU01TX0FVVEgyMDI1MTIwMzE0NTUyMDExNTM0MDY='; // 테스트용, 실제 서비스 시 발급 필요
+const JUSO_API_KEY = process.env.JUSO_API_KEY;
 
 interface JusoAddress {
   roadAddr: string; // 도로명주소
@@ -53,6 +53,14 @@ export async function POST(request: NextRequest) {
         total: 0,
         hasMore: false,
       });
+    }
+
+    if (!JUSO_API_KEY) {
+      logger.error('JUSO_API_KEY not configured');
+      return NextResponse.json(
+        { error: 'Address API not configured', results: [], total: 0, hasMore: false },
+        { status: 500 }
+      );
     }
 
     // 도로명주소 API 호출 (좌표 포함)

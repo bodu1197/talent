@@ -1,5 +1,6 @@
 'use client';
 
+import { logger } from '@/lib/logger';
 import { useState, useEffect } from 'react';
 import ErrandMypageLayout from '@/components/errands/ErrandMypageLayout';
 import { useAuth } from '@/components/providers/AuthProvider';
@@ -66,7 +67,7 @@ export default function RequesterSettingsPage() {
         setTimeout(() => setSaveSuccess(false), 3000);
       }
     } catch (error) {
-      console.error('설정 저장 실패:', error);
+      logger.error('설정 저장 실패:', error);
     } finally {
       setSaving(false);
     }

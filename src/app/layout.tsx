@@ -211,9 +211,7 @@ export default async function RootLayout({
             __html: `
               if ('serviceWorker' in navigator) {
                 globalThis.window.addEventListener('load', function() {
-                  navigator.serviceWorker.register('/sw.js').catch(function(err) {
-                    console.log('ServiceWorker registration failed: ', err);
-                  });
+                  navigator.serviceWorker.register('/sw.js').catch(function() {});
                 });
               }
             `,

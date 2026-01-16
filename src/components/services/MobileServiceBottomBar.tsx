@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Heart, MessageCircle } from 'lucide-react';
 import { useAuth } from '@/components/providers/AuthProvider';
 import { createClient } from '@/lib/supabase/client';
+import { logger } from '@/lib/logger';
 
 interface MobileServiceBottomBarProps {
   readonly serviceId: string;
@@ -50,7 +51,7 @@ export default function MobileServiceBottomBar({
         setIsFavorite(true);
       }
     } catch (error) {
-      console.error('찜 처리 중 오류:', error);
+      logger.error('찜 처리 중 오류', error);
     } finally {
       setIsLoading(false);
     }

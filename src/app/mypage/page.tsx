@@ -1,5 +1,6 @@
 'use client';
 
+import { logger } from '@/lib/logger';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/components/providers/AuthProvider';
@@ -100,7 +101,7 @@ export default function MypageHubPage() {
         setIsRegisteredHelper(helperData.isRegistered);
       }
     } catch (error) {
-      console.error('Dashboard data load error:', error);
+      logger.error('Dashboard data load error:', error);
     } finally {
       setLoading(false);
     }

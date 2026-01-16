@@ -1,5 +1,6 @@
 'use client';
 
+import { logger } from '@/lib/logger';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import ErrandMypageLayout from '@/components/errands/ErrandMypageLayout';
@@ -66,7 +67,7 @@ export default function ErrandHistoryPage() {
         setErrands(data.errands || []);
       }
     } catch (error) {
-      console.error('완료 내역 로드 실패:', error);
+      logger.error('완료 내역 로드 실패:', error);
     } finally {
       setLoading(false);
     }

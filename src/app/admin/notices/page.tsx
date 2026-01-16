@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { Plus, Edit, Trash2, Eye, EyeOff, Star, Search, X } from 'lucide-react';
 import { toast } from 'react-hot-toast';
+import { logger } from '@/lib/logger';
 
 interface Notice {
   id: string;
@@ -47,7 +48,7 @@ async function sendNotificationToAllUsers(noticeId: string, noticeTitle: string)
   );
 
   if (notifyError) {
-    console.error('알림 발송 실패:', notifyError);
+    logger.error('알림 발송 실패', notifyError);
     return;
   }
   toast.success(`${notifyResult}명에게 알림이 발송되었습니다.`);
@@ -83,7 +84,7 @@ export default function AdminNoticesPage() {
 
     if (error) {
       toast.error('공지사항을 불러오는데 실패했습니다.');
-      console.error(error);
+      logger.error('공지사항 로드 실패', error);
     } else {
       setNotices(data || []);
     }
@@ -144,7 +145,7 @@ export default function AdminNoticesPage() {
 
     if (error) {
       toast.error('수정에 실패했습니다.');
-      console.error(error);
+      logger.error('공지사항 수정 실패', error);
       return;
     }
     toast.success('공지사항이 수정되었습니다.');
@@ -167,7 +168,7 @@ export default function AdminNoticesPage() {
 
     if (error) {
       toast.error('등록에 실패했습니다.');
-      console.error(error);
+      logger.error('공지사항 등록 실패', error);
       return;
     }
 
@@ -190,7 +191,7 @@ export default function AdminNoticesPage() {
 
     if (error) {
       toast.error('삭제에 실패했습니다.');
-      console.error(error);
+      logger.error('공지사항 삭제 실패', error);
     } else {
       toast.success('공지사항이 삭제되었습니다.');
       fetchNotices();

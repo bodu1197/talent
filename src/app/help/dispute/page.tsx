@@ -1,5 +1,6 @@
 'use client';
 
+import { logger } from '@/lib/logger';
 import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
@@ -181,7 +182,7 @@ export default function DisputeApplyPage() {
     const error = buyerError || sellerError;
 
     if (error) {
-      console.error('Orders load error:', error);
+      logger.error('Orders load error:', error);
     } else {
       // 타입 단언 후 합치기
       const buyerOrdersData = (buyerOrders || []) as unknown as OrderQueryResult[];
@@ -311,7 +312,7 @@ export default function DisputeApplyPage() {
       toast.success(`분쟁이 접수되었습니다. 사건번호: ${dispute.case_number}`);
       router.push(`/help/dispute/${dispute.id}`);
     } catch (error) {
-      console.error('Dispute submit error:', error);
+      logger.error('Dispute submit error:', error);
       toast.error('분쟁 신청에 실패했습니다. 다시 시도해주세요.');
     } finally {
       setSubmitting(false);

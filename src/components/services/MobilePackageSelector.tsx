@@ -90,7 +90,7 @@ export default function MobilePackageSelector({
         setIsFavorite(true);
       }
     } catch (error) {
-      console.error('찜 처리 중 오류:', error);
+      logger.error('찜 처리 중 오류', error);
     } finally {
       setIsLoading(false);
     }

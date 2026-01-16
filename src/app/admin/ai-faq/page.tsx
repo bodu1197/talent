@@ -2,8 +2,20 @@
 
 import { useEffect, useState, useCallback } from 'react';
 import { createClient } from '@/lib/supabase/client';
-import { Plus, Edit, Trash2, Eye, EyeOff, Search, X, MessageCircle, ChevronUp, ChevronDown } from 'lucide-react';
+import {
+  Plus,
+  Edit,
+  Trash2,
+  Eye,
+  EyeOff,
+  Search,
+  X,
+  MessageCircle,
+  ChevronUp,
+  ChevronDown,
+} from 'lucide-react';
 import { toast } from 'react-hot-toast';
+import { logger } from '@/lib/logger';
 
 interface FAQ {
   id: string;
@@ -17,21 +29,33 @@ interface FAQ {
   updated_at: string;
 }
 
-const CATEGORIES = ['수수료', '판매자', '구매', '결제', '계정', '채팅', '심부름', '신고', '기타', '서비스 이용', '고객지원'];
+const CATEGORIES = [
+  '수수료',
+  '판매자',
+  '구매',
+  '결제',
+  '계정',
+  '채팅',
+  '심부름',
+  '신고',
+  '기타',
+  '서비스 이용',
+  '고객지원',
+];
 
 function getCategoryColor(cat: string) {
   const colors: Record<string, string> = {
-    '수수료': 'bg-green-100 text-green-800',
-    '판매자': 'bg-blue-100 text-blue-800',
-    '구매': 'bg-purple-100 text-purple-800',
-    '결제': 'bg-yellow-100 text-yellow-800',
-    '계정': 'bg-gray-100 text-gray-800',
-    '채팅': 'bg-pink-100 text-pink-800',
-    '심부름': 'bg-orange-100 text-orange-800',
-    '신고': 'bg-red-100 text-red-800',
-    '기타': 'bg-slate-100 text-slate-800',
+    수수료: 'bg-green-100 text-green-800',
+    판매자: 'bg-blue-100 text-blue-800',
+    구매: 'bg-purple-100 text-purple-800',
+    결제: 'bg-yellow-100 text-yellow-800',
+    계정: 'bg-gray-100 text-gray-800',
+    채팅: 'bg-pink-100 text-pink-800',
+    심부름: 'bg-orange-100 text-orange-800',
+    신고: 'bg-red-100 text-red-800',
+    기타: 'bg-slate-100 text-slate-800',
     '서비스 이용': 'bg-indigo-100 text-indigo-800',
-    '고객지원': 'bg-cyan-100 text-cyan-800',
+    고객지원: 'bg-cyan-100 text-cyan-800',
   };
   return colors[cat] || 'bg-gray-100 text-gray-800';
 }
@@ -74,7 +98,7 @@ export default function AdminFAQPage() {
 
     if (error) {
       toast.error('FAQ 목록을 불러오는데 실패했습니다.');
-      console.error(error);
+      logger.error('FAQ 작업 실패', error);
     } else {
       setFaqs(data || []);
     }
@@ -122,8 +146,8 @@ export default function AdminFAQPage() {
     const supabase = createClient();
     const keywordsArray = formData.keywords
       .split(',')
-      .map(k => k.trim())
-      .filter(k => k.length > 0);
+      .map((k) => k.trim())
+      .filter((k) => k.length > 0);
 
     const faqData = {
       category: formData.category,
@@ -143,7 +167,7 @@ export default function AdminFAQPage() {
 
       if (error) {
         toast.error('FAQ 수정에 실패했습니다.');
-        console.error(error);
+        logger.error('FAQ 작업 실패', error);
       } else {
         toast.success('FAQ가 수정되었습니다.');
         setIsModalOpen(false);
@@ -151,13 +175,11 @@ export default function AdminFAQPage() {
       }
     } else {
       // 생성
-      const { error } = await supabase
-        .from('ai_support_knowledge')
-        .insert(faqData);
+      const { error } = await supabase.from('ai_support_knowledge').insert(faqData);
 
       if (error) {
         toast.error('FAQ 추가에 실패했습니다.');
-        console.error(error);
+        logger.error('FAQ 작업 실패', error);
       } else {
         toast.success('FAQ가 추가되었습니다.');
         setIsModalOpen(false);
@@ -170,14 +192,11 @@ export default function AdminFAQPage() {
     if (!confirm('정말 이 FAQ를 삭제하시겠습니까?')) return;
 
     const supabase = createClient();
-    const { error } = await supabase
-      .from('ai_support_knowledge')
-      .delete()
-      .eq('id', id);
+    const { error } = await supabase.from('ai_support_knowledge').delete().eq('id', id);
 
     if (error) {
       toast.error('FAQ 삭제에 실패했습니다.');
-      console.error(error);
+      logger.error('FAQ 작업 실패', error);
     } else {
       toast.success('FAQ가 삭제되었습니다.');
       fetchFaqs();
@@ -215,21 +234,24 @@ export default function AdminFAQPage() {
   };
 
   // 필터링된 FAQ
-  const filteredFaqs = faqs.filter(faq => {
+  const filteredFaqs = faqs.filter((faq) => {
     if (!searchQuery) return true;
     const query = searchQuery.toLowerCase();
     return (
       faq.question.toLowerCase().includes(query) ||
       faq.answer.toLowerCase().includes(query) ||
-      faq.keywords.some(k => k.toLowerCase().includes(query))
+      faq.keywords.some((k) => k.toLowerCase().includes(query))
     );
   });
 
   // 카테고리별 통계
-  const categoryStats = faqs.reduce((acc, faq) => {
-    acc[faq.category] = (acc[faq.category] || 0) + 1;
-    return acc;
-  }, {} as Record<string, number>);
+  const categoryStats = faqs.reduce(
+    (acc, faq) => {
+      acc[faq.category] = (acc[faq.category] || 0) + 1;
+      return acc;
+    },
+    {} as Record<string, number>
+  );
 
   return (
     <div className="p-6">
@@ -255,18 +277,21 @@ export default function AdminFAQPage() {
 
       {/* 통계 카드 */}
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 mb-6">
-        {Object.entries(categoryStats).slice(0, 6).map(([category, count]) => (
-          <button
-            type="button"
-            key={category}
-            className={`p-3 rounded-lg cursor-pointer transition hover:scale-105 text-left ${selectedCategory === category ? 'ring-2 ring-blue-500' : ''
+        {Object.entries(categoryStats)
+          .slice(0, 6)
+          .map(([category, count]) => (
+            <button
+              type="button"
+              key={category}
+              className={`p-3 rounded-lg cursor-pointer transition hover:scale-105 text-left ${
+                selectedCategory === category ? 'ring-2 ring-blue-500' : ''
               } ${getCategoryColor(category)}`}
-            onClick={() => setSelectedCategory(selectedCategory === category ? '' : category)}
-          >
-            <div className="text-lg font-bold">{count}</div>
-            <div className="text-sm">{category}</div>
-          </button>
-        ))}
+              onClick={() => setSelectedCategory(selectedCategory === category ? '' : category)}
+            >
+              <div className="text-lg font-bold">{count}</div>
+              <div className="text-sm">{category}</div>
+            </button>
+          ))}
       </div>
 
       {/* 검색 및 필터 */}
@@ -295,8 +320,10 @@ export default function AdminFAQPage() {
           className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
         >
           <option value="">전체 카테고리</option>
-          {CATEGORIES.map(cat => (
-            <option key={cat} value={cat}>{cat}</option>
+          {CATEGORIES.map((cat) => (
+            <option key={cat} value={cat}>
+              {cat}
+            </option>
           ))}
         </select>
       </div>
@@ -321,18 +348,23 @@ export default function AdminFAQPage() {
           {filteredFaqs.map((faq) => (
             <div
               key={faq.id}
-              className={`bg-white rounded-lg border p-4 ${faq.is_active ? 'border-gray-200' : 'border-red-200 bg-red-50/30'
-                }`}
+              className={`bg-white rounded-lg border p-4 ${
+                faq.is_active ? 'border-gray-200' : 'border-red-200 bg-red-50/30'
+              }`}
             >
               <div className="flex justify-between items-start gap-4">
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-2">
-                    <span className={`px-2 py-1 rounded text-xs font-medium ${getCategoryColor(faq.category)}`}>
+                    <span
+                      className={`px-2 py-1 rounded text-xs font-medium ${getCategoryColor(faq.category)}`}
+                    >
                       {faq.category}
                     </span>
                     <span className="text-xs text-gray-500">우선순위: {faq.priority}</span>
                     {!faq.is_active && (
-                      <span className="px-2 py-1 bg-red-100 text-red-800 rounded text-xs">비활성</span>
+                      <span className="px-2 py-1 bg-red-100 text-red-800 rounded text-xs">
+                        비활성
+                      </span>
                     )}
                   </div>
                   <h3 className="font-semibold text-gray-900 mb-2">Q: {faq.question}</h3>
@@ -342,7 +374,10 @@ export default function AdminFAQPage() {
                   {faq.keywords.length > 0 && (
                     <div className="flex flex-wrap gap-1 mt-2">
                       {faq.keywords.map((keyword) => (
-                        <span key={`${faq.id}-${keyword}`} className="px-2 py-0.5 bg-gray-100 text-gray-600 rounded text-xs">
+                        <span
+                          key={`${faq.id}-${keyword}`}
+                          className="px-2 py-0.5 bg-gray-100 text-gray-600 rounded text-xs"
+                        >
                           #{keyword}
                         </span>
                       ))}
@@ -407,9 +442,7 @@ export default function AdminFAQPage() {
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
             <div className="sticky top-0 bg-white border-b p-4 flex justify-between items-center">
-              <h2 className="text-xl font-bold">
-                {editingFaq ? 'FAQ 수정' : '새 FAQ 추가'}
-              </h2>
+              <h2 className="text-xl font-bold">{editingFaq ? 'FAQ 수정' : '새 FAQ 추가'}</h2>
               <button
                 onClick={() => setIsModalOpen(false)}
                 className="p-2 hover:bg-gray-100 rounded"
@@ -421,7 +454,10 @@ export default function AdminFAQPage() {
             <form onSubmit={handleSubmit} className="p-4 space-y-4">
               {/* 카테고리 */}
               <div>
-                <label htmlFor="faq-category" className="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                  htmlFor="faq-category"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
                   카테고리 *
                 </label>
                 <select
@@ -431,15 +467,20 @@ export default function AdminFAQPage() {
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                   required
                 >
-                  {CATEGORIES.map(cat => (
-                    <option key={cat} value={cat}>{cat}</option>
+                  {CATEGORIES.map((cat) => (
+                    <option key={cat} value={cat}>
+                      {cat}
+                    </option>
                   ))}
                 </select>
               </div>
 
               {/* 질문 */}
               <div>
-                <label htmlFor="faq-question" className="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                  htmlFor="faq-question"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
                   질문 *
                 </label>
                 <input
@@ -455,7 +496,10 @@ export default function AdminFAQPage() {
 
               {/* 답변 */}
               <div>
-                <label htmlFor="faq-answer" className="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                  htmlFor="faq-answer"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
                   답변 *
                 </label>
                 <textarea
@@ -471,7 +515,10 @@ export default function AdminFAQPage() {
 
               {/* 키워드 */}
               <div>
-                <label htmlFor="faq-keywords" className="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                  htmlFor="faq-keywords"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
                   키워드 (쉼표로 구분)
                 </label>
                 <input
@@ -489,7 +536,10 @@ export default function AdminFAQPage() {
 
               {/* 우선순위 */}
               <div>
-                <label htmlFor="faq-priority" className="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                  htmlFor="faq-priority"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
                   우선순위 (0-100)
                 </label>
                 <input
@@ -498,7 +548,9 @@ export default function AdminFAQPage() {
                   min="0"
                   max="100"
                   value={formData.priority}
-                  onChange={(e) => setFormData({ ...formData, priority: Number.parseInt(e.target.value, 10) || 0 })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, priority: Number.parseInt(e.target.value, 10) || 0 })
+                  }
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                 />
                 <p className="text-xs text-gray-500 mt-1">

@@ -1,5 +1,6 @@
 'use client';
 
+import { logger } from '@/lib/logger';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import ErrandMypageLayout from '@/components/errands/ErrandMypageLayout';
@@ -68,7 +69,7 @@ export default function HelperEarningsPage() {
         setTransactions(data.transactions || []);
       }
     } catch (error) {
-      console.error('수익 데이터 로드 실패:', error);
+      logger.error('수익 데이터 로드 실패:', error);
     } finally {
       setLoading(false);
     }

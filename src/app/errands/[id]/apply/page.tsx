@@ -1,5 +1,6 @@
 'use client';
 
+import { logger } from '@/lib/logger';
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
@@ -88,14 +89,14 @@ export default function ErrandApplyPage() {
       if (!res.ok) {
         const errorMsg = data.error || '지원에 실패했습니다';
         setSubmitError(errorMsg);
-        console.error('지원 실패:', data);
+        logger.error('지원 실패:', data);
         return;
       }
 
       // 성공 시 채팅 페이지로 바로 이동
       router.push(`/errands/${id}/chat`);
     } catch (err) {
-      console.error('네트워크 오류:', err);
+      logger.error('네트워크 오류:', err);
       setSubmitError('네트워크 오류가 발생했습니다. 다시 시도해주세요.');
     } finally {
       setSubmitting(false);

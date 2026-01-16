@@ -366,7 +366,7 @@ export default function ServiceForm({
 
       await onSubmit(formData, publicUrl);
     } catch (error) {
-      console.error(error);
+      logger.error('서비스 폼 제출 오류', error);
       toast.error('처리 중 오류가 발생했습니다.');
     } finally {
       setLoading(false);

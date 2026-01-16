@@ -1,5 +1,6 @@
 'use client';
 
+import { logger } from '@/lib/logger';
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import ErrandMypageLayout from '@/components/errands/ErrandMypageLayout';
@@ -126,7 +127,7 @@ export default function HelperAvailableErrandsPage() {
         setErrands(data.errands || []);
       }
     } catch (error) {
-      console.error('심부름 목록 로드 실패:', error);
+      logger.error('심부름 목록 로드 실패:', error);
     } finally {
       setLoading(false);
     }

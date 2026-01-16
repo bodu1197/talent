@@ -1,5 +1,6 @@
 'use client';
 
+import { logger } from '@/lib/logger';
 import { useState } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/components/providers/AuthProvider';
@@ -58,7 +59,7 @@ export default function ContactPage() {
       });
 
       if (error) {
-        console.error('문의 저장 실패:', error);
+        logger.error('문의 저장 실패:', error);
         toast.error('문의 접수에 실패했습니다. 잠시 후 다시 시도해주세요.');
         return;
       }
@@ -66,7 +67,7 @@ export default function ContactPage() {
       setSubmitted(true);
       toast.success('문의가 접수되었습니다.');
     } catch (err) {
-      console.error('문의 저장 오류:', err);
+      logger.error('문의 저장 오류:', err);
       toast.error('문의 접수 중 오류가 발생했습니다.');
     } finally {
       setSubmitting(false);

@@ -1,5 +1,6 @@
 'use client';
 
+import { logger } from '@/lib/logger';
 import { useState, useEffect } from 'react';
 import ErrandMypageLayout from '@/components/errands/ErrandMypageLayout';
 import { useAuth } from '@/components/providers/AuthProvider';
@@ -60,7 +61,7 @@ export default function HelperReviewsPage() {
         );
       }
     } catch (error) {
-      console.error('리뷰 로드 실패:', error);
+      logger.error('리뷰 로드 실패:', error);
     } finally {
       setLoading(false);
     }
