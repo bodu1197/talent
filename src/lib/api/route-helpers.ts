@@ -52,7 +52,7 @@ async function withAuth<T extends AuthContext | (AuthContext & { id: string })>(
 
     return await handler(request, { ...context, user, supabase } as T);
   } catch (error) {
-    console.error('Route error:', error);
+    logger.error('Route error:', error);
     return NextResponse.json({ error: '서버 오류가 발생했습니다' }, { status: 500 });
   }
 }

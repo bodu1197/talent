@@ -7,6 +7,7 @@
  * - logger.warn('경고 메시지', { data })
  * - logger.error('에러 메시지', error)      // 항상 출력
  */
+import * as Sentry from '@sentry/nextjs';
 
 type LogLevel = 'debug' | 'info' | 'warn' | 'error' | 'none';
 
@@ -137,10 +138,9 @@ class Logger {
     }
 
     // [Production] 프로덕션 환경에서는 Sentry 에러 트래킹 서비스로 전송
-    // 현재 @sentry/nextjs 설치됨 - captureException 사용 가능
-    // if (!this.isDevelopment) {
-    //   Sentry.captureException(error, { extra: { message, sanitized } })
-    // }
+    if (!this.isDevelopment && process.env.NEXT_PUBLIC_SENTRY_DSN) {
+      Sentry.captureException(error, { extra: { message, ...((sanitized as object) || {}) } });
+    }
   }
 
   /**
