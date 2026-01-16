@@ -116,7 +116,7 @@ export default function DisputeApplyPage() {
         id,
         title,
         seller_id,
-        seller:profiles!services_seller_id_fkey(display_name)
+        seller:seller_profiles(display_name)
       )
     `;
 
@@ -130,8 +130,8 @@ export default function DisputeApplyPage() {
         id: string;
         title: string;
         seller_id: string;
-        seller: { display_name: string };
-      };
+        seller: { display_name: string } | null;
+      } | null;
     };
 
     // 1. 구매자로서의 주문
@@ -142,27 +142,40 @@ export default function DisputeApplyPage() {
       .order('created_at', { ascending: false })
       .limit(50);
 
-    // 2. 판매자로서의 주문 (services 테이블 inner join)
-    const { data: sellerOrders, error: sellerError } = await supabase
-      .from('orders')
-      .select(
-        `
-        id,
-        total_amount,
-        status,
-        created_at,
-        buyer_id,
-        service:services!inner(
+    // 2. 판매자로서의 주문 - 먼저 판매자 ID 조회
+    let sellerOrders: OrderQueryResult[] | null = null;
+    let sellerError: Error | null = null;
+
+    const { data: sellerData } = await supabase
+      .from('sellers')
+      .select('id')
+      .eq('user_id', user.id)
+      .maybeSingle();
+
+    if (sellerData?.id) {
+      const { data, error } = await supabase
+        .from('orders')
+        .select(
+          `
           id,
-          title,
-          seller_id,
-          seller:profiles!services_seller_id_fkey(display_name)
+          total_amount,
+          status,
+          created_at,
+          buyer_id,
+          service:services!inner(
+            id,
+            title,
+            seller_id,
+            seller:seller_profiles(display_name)
+          )
+        `
         )
-      `
-      )
-      .eq('services.seller_id', user.id)
-      .order('created_at', { ascending: false })
-      .limit(50);
+        .eq('services.seller_id', sellerData.id)
+        .order('created_at', { ascending: false })
+        .limit(50);
+      sellerOrders = data as OrderQueryResult[] | null;
+      sellerError = error;
+    }
 
     const error = buyerError || sellerError;
 
@@ -170,13 +183,13 @@ export default function DisputeApplyPage() {
       console.error('Orders load error:', error);
     } else {
       // 타입 단언 후 합치기
-      const buyerData = (buyerOrders || []) as unknown as OrderQueryResult[];
-      const sellerData = (sellerOrders || []) as unknown as OrderQueryResult[];
+      const buyerOrdersData = (buyerOrders || []) as unknown as OrderQueryResult[];
+      const sellerOrdersData = (sellerOrders || []) as unknown as OrderQueryResult[];
 
       // 중복 제거
-      const buyerOrderIds = new Set(buyerData.map((o) => o.id));
-      const uniqueSellerOrders = sellerData.filter((o) => !buyerOrderIds.has(o.id));
-      const ordersData = [...buyerData, ...uniqueSellerOrders];
+      const buyerOrderIds = new Set(buyerOrdersData.map((o) => o.id));
+      const uniqueSellerOrders = sellerOrdersData.filter((o) => !buyerOrderIds.has(o.id));
+      const ordersData = [...buyerOrdersData, ...uniqueSellerOrders];
 
       // 날짜순 정렬
       ordersData.sort(
