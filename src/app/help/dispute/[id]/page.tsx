@@ -39,10 +39,16 @@ interface Dispute {
   defendant_accepted: boolean | null;
   response_deadline: string | null;
   created_at: string;
-  plaintiff: { display_name: string; avatar_url: string | null };
-  defendant: { display_name: string; avatar_url: string | null };
-  service: { id: string; title: string; category: string } | null;
-  order: { id: string; total_amount: number } | null;
+  // 뷰에서 가져온 정보
+  plaintiff_name: string | null;
+  plaintiff_avatar_url: string | null;
+  defendant_name: string | null;
+  defendant_avatar_url: string | null;
+  service_id: string | null;
+  service_title: string | null;
+  service_category: string | null;
+  order_id: string | null;
+  order_total_amount: number | null;
 }
 
 interface Message {
@@ -197,18 +203,10 @@ export default function DisputeDetailPage() {
     }
     setUser(user);
 
-    // 분쟁 정보 조회
+    // 분쟁 정보 조회 (dispute_details 뷰 사용)
     const { data: disputeData, error: disputeError } = await supabase
-      .from('disputes')
-      .select(
-        `
-        *,
-        plaintiff:profiles!disputes_plaintiff_id_fkey(display_name, avatar_url),
-        defendant:profiles!disputes_defendant_id_fkey(display_name, avatar_url),
-        service:services(id, title, category),
-        order:orders(id, total_amount)
-      `
-      )
+      .from('dispute_details')
+      .select('*')
       .eq('id', disputeId)
       .single();
 
@@ -394,7 +392,7 @@ export default function DisputeDetailPage() {
                 <Scale className="w-6 h-6 text-blue-600" />
                 분쟁 #{dispute.case_number}
               </h1>
-              <p className="text-gray-600 mt-1">{dispute.service?.title || '서비스 정보 없음'}</p>
+              <p className="text-gray-600 mt-1">{dispute.service_title || '서비스 정보 없음'}</p>
             </div>
             <div className={`px-4 py-2 rounded-full flex items-center gap-2 ${statusConfig.color}`}>
               {statusConfig.icon}
@@ -441,7 +439,7 @@ export default function DisputeDetailPage() {
                 <User className="w-6 h-6 text-blue-600" />
               </div>
               <div>
-                <p className="font-medium">{dispute.plaintiff?.display_name || '익명'}</p>
+                <p className="font-medium">{dispute.plaintiff_name || '익명'}</p>
                 <p className="text-sm text-gray-500">
                   원고 ({dispute.plaintiff_role === 'buyer' ? '구매자' : '판매자'})
                 </p>
@@ -453,7 +451,7 @@ export default function DisputeDetailPage() {
                 <User className="w-6 h-6 text-gray-600" />
               </div>
               <div>
-                <p className="font-medium">{dispute.defendant?.display_name || '익명'}</p>
+                <p className="font-medium">{dispute.defendant_name || '익명'}</p>
                 <p className="text-sm text-gray-500">
                   피고 ({dispute.plaintiff_role === 'buyer' ? '판매자' : '구매자'})
                 </p>

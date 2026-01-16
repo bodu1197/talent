@@ -97,18 +97,10 @@ export async function GET(_request: NextRequest) {
       return NextResponse.json({ error: '로그인이 필요합니다.' }, { status: 401 });
     }
 
-    // 내가 관련된 분쟁 조회
+    // 내가 관련된 분쟁 조회 (dispute_details 뷰 사용)
     const { data: disputes, error } = await supabase
-      .from('disputes')
-      .select(
-        `
-        *,
-        plaintiff:profiles!disputes_plaintiff_id_fkey(display_name, avatar_url),
-        defendant:profiles!disputes_defendant_id_fkey(display_name, avatar_url),
-        order:orders(id, total_amount, status),
-        service:services(id, title, category)
-      `
-      )
+      .from('dispute_details')
+      .select('*')
       .or(`plaintiff_id.eq.${user.id},defendant_id.eq.${user.id}`)
       .order('created_at', { ascending: false });
 
@@ -143,20 +135,36 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: '분쟁 ID가 필요합니다.' }, { status: 400 });
     }
 
-    // 분쟁 정보 조회
-    const { data: dispute, error: disputeError } = await supabase
-      .from('disputes')
-      .select(
-        `
-        *,
-        plaintiff:profiles!disputes_plaintiff_id_fkey(display_name),
-        defendant:profiles!disputes_defendant_id_fkey(display_name),
-        order:orders(id, total_amount, status, created_at),
-        service:services(id, title, category, revision_count)
-      `
-      )
+    // 분쟁 정보 조회 (dispute_details 뷰 사용)
+    const { data: disputeFromView, error: disputeError } = await supabase
+      .from('dispute_details')
+      .select('*')
       .eq('id', disputeId)
       .single();
+
+    // 핸들러에서 사용할 형식으로 변환
+    const dispute = disputeFromView
+      ? {
+          ...disputeFromView,
+          plaintiff: { display_name: disputeFromView.plaintiff_name || '익명' },
+          defendant: { display_name: disputeFromView.defendant_name || '익명' },
+          order: disputeFromView.order_id
+            ? {
+                id: disputeFromView.order_id,
+                total_amount: disputeFromView.order_total_amount || 0,
+                status: disputeFromView.order_status || 'unknown',
+                created_at: disputeFromView.order_created_at || disputeFromView.created_at,
+              }
+            : undefined,
+          service: disputeFromView.service_id
+            ? {
+                id: disputeFromView.service_id,
+                title: disputeFromView.service_title || '',
+                category: disputeFromView.service_category || '',
+              }
+            : undefined,
+        }
+      : null;
 
     if (disputeError || !dispute) {
       return NextResponse.json({ error: '분쟁을 찾을 수 없습니다.' }, { status: 404 });

@@ -5,12 +5,12 @@
 
 import { NextResponse } from 'next/server';
 import { SupabaseClient } from '@supabase/supabase-js';
-import { 
-  SERVICE_TYPES, 
-  DISPUTE_TYPES, 
+import {
+  SERVICE_TYPES,
+  DISPUTE_TYPES,
   analyzeDispute,
   generateVerdictDocument,
-  DisputeContext
+  DisputeContext,
 } from '@/lib/dispute/verdict-engine';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 
@@ -42,7 +42,9 @@ interface VerdictBasic {
 }
 
 // 주문 상태를 서비스 단계로 매핑
-function mapOrderStatusToStage(orderStatus?: string): keyof typeof import('@/lib/dispute/verdict-engine').SERVICE_STAGES {
+function mapOrderStatusToStage(
+  orderStatus?: string
+): keyof typeof import('@/lib/dispute/verdict-engine').SERVICE_STAGES {
   switch (orderStatus) {
     case 'pending':
     case 'paid':
@@ -63,23 +65,20 @@ function mapOrderStatusToStage(orderStatus?: string): keyof typeof import('@/lib
 // 진행률 계산
 function calculateProgress(orderStatus?: string): number {
   const progressMap: Record<string, number> = {
-    'pending': 0,
-    'paid': 0,
-    'in_progress': 50,
-    'delivered': 80,
-    'revision': 70,
-    'completed': 100,
+    pending: 0,
+    paid: 0,
+    in_progress: 50,
+    delivered: 80,
+    revision: 70,
+    completed: 100,
   };
   return progressMap[orderStatus ?? ''] ?? 50;
 }
 
 // 실제 수정 횟수 계산
-async function getActualRevisionCount(
-  supabase: SupabaseClient,
-  orderId?: string
-): Promise<number> {
+async function getActualRevisionCount(supabase: SupabaseClient, orderId?: string): Promise<number> {
   if (!orderId) return 0;
-  
+
   try {
     // 주문 관련 메시지에서 수정 요청 횟수 계산
     const { count } = await supabase
@@ -87,7 +86,7 @@ async function getActualRevisionCount(
       .select('*', { count: 'exact', head: true })
       .eq('order_id', orderId)
       .ilike('content', '%수정%');
-    
+
     return count ?? 0;
   } catch {
     return 0;
@@ -105,13 +104,13 @@ async function checkEvidenceExists(
       .from('dispute_messages')
       .select('*', { count: 'exact', head: true })
       .eq('dispute_id', disputeId);
-    
+
     // 증거 첨부 확인
     const { count: evidenceCount } = await supabase
-      .from('dispute_evidence')
+      .from('dispute_evidences')
       .select('*', { count: 'exact', head: true })
       .eq('dispute_id', disputeId);
-    
+
     return {
       chatLogs: (messageCount ?? 0) > 0,
       contract: true, // 주문이 있으면 계약 존재
@@ -124,20 +123,20 @@ async function checkEvidenceExists(
 
 // 서비스 유형 매핑
 const serviceTypeMap: Record<string, keyof typeof SERVICE_TYPES> = {
-  '디자인': 'CREATIVE',
-  '개발': 'DEVELOPMENT',
-  '레슨': 'LESSON',
-  '상담': 'CONSULTATION',
-  '번역': 'AGENCY',
-  '심부름': 'ERRAND',
-  '오프라인': 'OFFLINE',
-  'design': 'CREATIVE',
-  'development': 'DEVELOPMENT',
-  'lesson': 'LESSON',
-  'consultation': 'CONSULTATION',
-  'translation': 'AGENCY',
-  'errand': 'ERRAND',
-  'offline': 'OFFLINE',
+  디자인: 'CREATIVE',
+  개발: 'DEVELOPMENT',
+  레슨: 'LESSON',
+  상담: 'CONSULTATION',
+  번역: 'AGENCY',
+  심부름: 'ERRAND',
+  오프라인: 'OFFLINE',
+  design: 'CREATIVE',
+  development: 'DEVELOPMENT',
+  lesson: 'LESSON',
+  consultation: 'CONSULTATION',
+  translation: 'AGENCY',
+  errand: 'ERRAND',
+  offline: 'OFFLINE',
 };
 
 // Gemini를 통한 추가 분석
@@ -204,11 +203,11 @@ JSON 형식으로 응답해주세요:
 
     const result = await model.generateContent(prompt);
     const responseText = result.response.text();
-    
+
     // 안전한 JSON 파싱 (ReDoS 취약점 방지)
     const firstBrace = responseText.indexOf('{');
     const lastBrace = responseText.lastIndexOf('}');
-    
+
     if (firstBrace !== -1 && lastBrace !== -1 && lastBrace > firstBrace) {
       try {
         const jsonString = responseText.substring(firstBrace, lastBrace + 1);
@@ -259,17 +258,17 @@ export async function handleSubmitResponse(
     content: response,
   });
 
-  return NextResponse.json({ success: true, message: '답변이 제출되었습니다. AI 심사가 시작됩니다.' });
+  return NextResponse.json({
+    success: true,
+    message: '답변이 제출되었습니다. AI 심사가 시작됩니다.',
+  });
 }
 
 // AI 판결 요청 핸들러
-export async function handleRequestVerdict(
-  supabase: SupabaseClient,
-  dispute: Dispute
-) {
+export async function handleRequestVerdict(supabase: SupabaseClient, dispute: Dispute) {
   // 실제 수정 횟수 계산
   const revisionsUsed = await getActualRevisionCount(supabase, dispute.order?.id);
-  
+
   // 증거 존재 여부 확인
   const evidence = await checkEvidenceExists(supabase, dispute.id);
 
@@ -310,8 +309,14 @@ export async function handleRequestVerdict(
   // 판결문 생성
   const verdictDocument = generateVerdictDocument(
     dispute.case_number,
-    { name: dispute.plaintiff?.display_name || '원고', role: dispute.plaintiff_role === 'buyer' ? '구매자' : '판매자' },
-    { name: dispute.defendant?.display_name || '피고', role: dispute.plaintiff_role === 'buyer' ? '판매자' : '구매자' },
+    {
+      name: dispute.plaintiff?.display_name || '원고',
+      role: dispute.plaintiff_role === 'buyer' ? '구매자' : '판매자',
+    },
+    {
+      name: dispute.defendant?.display_name || '피고',
+      role: dispute.plaintiff_role === 'buyer' ? '판매자' : '구매자',
+    },
     context,
     finalVerdict
   );
@@ -337,8 +342,8 @@ export async function handleRequestVerdict(
     metadata: { verdict: finalVerdict },
   });
 
-  return NextResponse.json({ 
-    success: true, 
+  return NextResponse.json({
+    success: true,
     verdict: finalVerdict,
     verdictDocument,
   });
@@ -352,7 +357,7 @@ export async function handleAcceptVerdict(
   isPlaintiff: boolean
 ) {
   const updateField = isPlaintiff ? 'plaintiff_accepted' : 'defendant_accepted';
-  
+
   await supabase
     .from('disputes')
     .update({ [updateField]: true })
@@ -366,12 +371,12 @@ export async function handleAcceptVerdict(
     .single();
 
   if (updatedDispute?.plaintiff_accepted && updatedDispute?.defendant_accepted) {
-    await supabase
-      .from('disputes')
-      .update({ status: 'resolved' })
-      .eq('id', disputeId);
+    await supabase.from('disputes').update({ status: 'resolved' }).eq('id', disputeId);
 
-    return NextResponse.json({ success: true, message: '양측 모두 판결을 수용하여 분쟁이 해결되었습니다.' });
+    return NextResponse.json({
+      success: true,
+      message: '양측 모두 판결을 수용하여 분쟁이 해결되었습니다.',
+    });
   }
 
   // 수용 메시지 저장
@@ -382,7 +387,10 @@ export async function handleAcceptVerdict(
     content: `${isPlaintiff ? '원고' : '피고'}가 판결을 수용했습니다.`,
   });
 
-  return NextResponse.json({ success: true, message: '판결을 수용했습니다. 상대방의 수용을 기다립니다.' });
+  return NextResponse.json({
+    success: true,
+    message: '판결을 수용했습니다. 상대방의 수용을 기다립니다.',
+  });
 }
 
 // 이의 신청 핸들러
@@ -396,10 +404,7 @@ export async function handleAppeal(
     return NextResponse.json({ error: '이의 사유를 20자 이상 작성해주세요.' }, { status: 400 });
   }
 
-  await supabase
-    .from('disputes')
-    .update({ status: 'admin_review' })
-    .eq('id', disputeId);
+  await supabase.from('disputes').update({ status: 'admin_review' }).eq('id', disputeId);
 
   await supabase.from('dispute_messages').insert({
     dispute_id: disputeId,
@@ -408,5 +413,8 @@ export async function handleAppeal(
     content: appealReason,
   });
 
-  return NextResponse.json({ success: true, message: '이의 신청이 접수되었습니다. 관리자가 검토 후 연락드립니다.' });
+  return NextResponse.json({
+    success: true,
+    message: '이의 신청이 접수되었습니다. 관리자가 검토 후 연락드립니다.',
+  });
 }

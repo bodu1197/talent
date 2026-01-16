@@ -23,6 +23,7 @@ interface Order {
     title: string;
     seller_id: string;
     seller: {
+      user_id: string;
       display_name: string;
     };
   };
@@ -116,7 +117,7 @@ export default function DisputeApplyPage() {
         id,
         title,
         seller_id,
-        seller:seller_profiles(display_name)
+        seller:seller_profiles(user_id, display_name)
       )
     `;
 
@@ -130,7 +131,7 @@ export default function DisputeApplyPage() {
         id: string;
         title: string;
         seller_id: string;
-        seller: { display_name: string } | null;
+        seller: { user_id: string; display_name: string } | null;
       } | null;
     };
 
@@ -166,7 +167,7 @@ export default function DisputeApplyPage() {
             id,
             title,
             seller_id,
-            seller:seller_profiles(display_name)
+            seller:seller_profiles(user_id, display_name)
           )
         `
         )
@@ -250,7 +251,12 @@ export default function DisputeApplyPage() {
       // 원고/피고 결정
       const isBuyer = user?.id === selectedOrder.buyer_id;
       const plaintiffId = user?.id;
-      const defendantId = isBuyer ? selectedOrder.service.seller_id : selectedOrder.buyer_id;
+      // seller_id는 sellers 테이블 ID이므로, user_id를 사용해야 함
+      const sellerUserId = selectedOrder.service.seller?.user_id;
+      if (!sellerUserId) {
+        throw new Error('판매자 정보를 찾을 수 없습니다.');
+      }
+      const defendantId = isBuyer ? sellerUserId : selectedOrder.buyer_id;
 
       // 분쟁 생성
       const { data: dispute, error: disputeError } = await supabase
