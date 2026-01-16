@@ -58,7 +58,6 @@ export const PATCH = withAuthenticatedPATCH(async (_request, { user, supabase, i
     logger.warn('수정 완료 이력 저장에 실패했지만 주문 상태는 변경되었습니다');
   }
 
-  // [Future Enhancement] 구매자에게 알림 전송 기능 추가 필요
-
+  // 알림은 DB 트리거 (notify_order_status_change)가 자동 처리
   return NextResponse.json({ success: true });
 });
