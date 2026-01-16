@@ -160,7 +160,7 @@ export default function DisputeApplyPage() {
         )
       `
       )
-      .eq('service.seller_id', user.id)
+      .eq('services.seller_id', user.id)
       .order('created_at', { ascending: false })
       .limit(50);
 
