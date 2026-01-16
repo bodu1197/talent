@@ -4,83 +4,6 @@ import { useCallback, useEffect, useState } from 'react';
 import { useAuth } from '@/components/providers/AuthProvider';
 import { logger } from '@/lib/logger';
 
-// Capacitor Push Notifications 인터페이스
-interface PushNotificationsPlugin {
-  requestPermissions: () => Promise<{ receive: string }>;
-  register: () => Promise<void>;
-  addListener: (
-    event: string,
-    callback: (data: unknown) => void
-  ) => Promise<{ remove: () => void }>;
-  getDeliveredNotifications: () => Promise<{ notifications: unknown[] }>;
-  removeAllDeliveredNotifications: () => Promise<void>;
-}
-
-interface PushNotificationToken {
-  value: string;
-}
-
-interface PushNotificationData {
-  id: string;
-  data: Record<string, string>;
-  title?: string;
-  body?: string;
-}
-
-// 네이티브 앱 환경 감지
-function isNativeApp(): boolean {
-  return (
-    typeof window !== 'undefined' && !!(window as unknown as { Capacitor?: unknown }).Capacitor
-  );
-}
-
-// Capacitor 플러그인 가져오기
-async function getPushPlugin(): Promise<PushNotificationsPlugin | null> {
-  if (!isNativeApp()) return null;
-
-  try {
-    // @capacitor/push-notifications 동적 임포트
-    const { PushNotifications } = await import('@capacitor/push-notifications');
-    return PushNotifications as unknown as PushNotificationsPlugin;
-  } catch {
-    logger.warn('Push notifications plugin not available');
-    return null;
-  }
-}
-
-// 플랫폼 감지
-function getPlatform(): 'android' | 'ios' | 'web' {
-  if (typeof window === 'undefined') return 'web';
-
-  const userAgent = navigator.userAgent.toLowerCase();
-  if (/android/.test(userAgent)) return 'android';
-  if (/iphone|ipad|ipod/.test(userAgent)) return 'ios';
-  return 'web';
-}
-
-// 디바이스 정보 가져오기
-async function getDeviceInfo(): Promise<{
-  device_id?: string;
-  device_name?: string;
-  os_version?: string;
-}> {
-  if (!isNativeApp()) return {};
-
-  try {
-    const { Device } = await import('@capacitor/device');
-    const info = await Device.getInfo();
-    const id = await Device.getId();
-
-    return {
-      device_id: id.identifier,
-      device_name: `${info.manufacturer} ${info.model}`,
-      os_version: info.osVersion,
-    };
-  } catch {
-    return {};
-  }
-}
-
 export interface PushNotificationSettings {
   push_enabled: boolean;
   notify_orders: boolean;
@@ -96,6 +19,92 @@ export interface PushNotificationSettings {
   }[];
 }
 
+// 브라우저 정보 가져오기
+function getBrowserInfo(): { device_name: string; os_version: string } {
+  if (typeof window === 'undefined') {
+    return { device_name: 'Unknown', os_version: 'Unknown' };
+  }
+
+  const userAgent = navigator.userAgent;
+  let browserName = 'Unknown Browser';
+  let osName = 'Unknown OS';
+
+  // 브라우저 감지
+  if (userAgent.includes('Chrome')) browserName = 'Chrome';
+  else if (userAgent.includes('Safari')) browserName = 'Safari';
+  else if (userAgent.includes('Firefox')) browserName = 'Firefox';
+  else if (userAgent.includes('Edge')) browserName = 'Edge';
+
+  // OS 감지
+  if (userAgent.includes('Windows')) osName = 'Windows';
+  else if (userAgent.includes('Mac')) osName = 'macOS';
+  else if (userAgent.includes('Linux')) osName = 'Linux';
+  else if (userAgent.includes('Android')) osName = 'Android';
+  else if (userAgent.includes('iOS') || userAgent.includes('iPhone')) osName = 'iOS';
+
+  return {
+    device_name: `${browserName} on ${osName}`,
+    os_version: osName,
+  };
+}
+
+// 서비스 워커 등록
+async function registerServiceWorker(): Promise<ServiceWorkerRegistration | null> {
+  if (!('serviceWorker' in navigator)) {
+    logger.warn('Service Worker를 지원하지 않는 브라우저입니다');
+    return null;
+  }
+
+  try {
+    const registration = await navigator.serviceWorker.register('/firebase-messaging-sw.js');
+    logger.info('Service Worker 등록 성공');
+    return registration;
+  } catch (error) {
+    logger.error('Service Worker 등록 실패:', error);
+    return null;
+  }
+}
+
+// FCM 토큰 가져오기
+async function getFCMToken(): Promise<string | null> {
+  try {
+    // Firebase SDK 동적 임포트
+    const { initializeApp, getApps } = await import('firebase/app');
+    const { getMessaging, getToken } = await import('firebase/messaging');
+
+    // Firebase 설정
+    const firebaseConfig = {
+      apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+      authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+      projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+      storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+      messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+      appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+    };
+
+    // Firebase 앱 초기화 (이미 초기화되지 않은 경우에만)
+    const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
+
+    // 메시징 인스턴스 가져오기
+    const messaging = getMessaging(app);
+
+    // Service Worker 등록
+    const registration = await registerServiceWorker();
+    if (!registration) return null;
+
+    // FCM 토큰 가져오기
+    const token = await getToken(messaging, {
+      vapidKey: process.env.NEXT_PUBLIC_FIREBASE_VAPID_KEY,
+      serviceWorkerRegistration: registration,
+    });
+
+    return token;
+  } catch (error) {
+    logger.error('FCM 토큰 가져오기 실패:', error);
+    return null;
+  }
+}
+
 export function usePushNotifications() {
   const { user } = useAuth();
   const [isSupported, setIsSupported] = useState(false);
@@ -103,14 +112,26 @@ export function usePushNotifications() {
   const [permission, setPermission] = useState<'granted' | 'denied' | 'default'>('default');
   const [settings, setSettings] = useState<PushNotificationSettings | null>(null);
   const [loading, setLoading] = useState(true);
+  const [fcmToken, setFcmToken] = useState<string | null>(null);
 
   // 푸시 알림 지원 여부 확인
   useEffect(() => {
-    const checkSupport = async () => {
-      const plugin = await getPushPlugin();
-      setIsSupported(!!plugin || 'Notification' in window);
+    const checkSupport = () => {
+      const supported =
+        typeof window !== 'undefined' &&
+        'Notification' in window &&
+        'serviceWorker' in navigator &&
+        'PushManager' in window;
+
+      setIsSupported(supported);
+
+      if (supported) {
+        setPermission(Notification.permission);
+      }
+
       setLoading(false);
     };
+
     checkSupport();
   }, []);
 
@@ -135,83 +156,50 @@ export function usePushNotifications() {
 
   // 권한 요청
   const requestPermission = useCallback(async (): Promise<boolean> => {
+    if (!isSupported) return false;
+
     try {
-      const plugin = await getPushPlugin();
-
-      if (plugin) {
-        // Capacitor 네이티브 앱
-        const result = await plugin.requestPermissions();
-        const granted = result.receive === 'granted';
-        setPermission(granted ? 'granted' : 'denied');
-        return granted;
-      } else if ('Notification' in window) {
-        // 웹 브라우저
-        const result = await Notification.requestPermission();
-        setPermission(result);
-        return result === 'granted';
-      }
-
-      return false;
+      const result = await Notification.requestPermission();
+      setPermission(result);
+      return result === 'granted';
     } catch (error) {
       logger.error('푸시 권한 요청 실패:', error);
       return false;
     }
-  }, []);
+  }, [isSupported]);
 
   // 토큰 등록
   const registerToken = useCallback(async (): Promise<boolean> => {
-    if (!user) return false;
+    if (!user || !isSupported) return false;
 
     try {
-      const plugin = await getPushPlugin();
+      // FCM 토큰 가져오기
+      const token = await getFCMToken();
+      if (!token) {
+        logger.warn('FCM 토큰을 가져올 수 없습니다');
+        return false;
+      }
 
-      if (plugin) {
-        // Capacitor 네이티브 앱
-        await plugin.register();
+      setFcmToken(token);
 
-        // 토큰 수신 리스너
-        await plugin.addListener('registration', async (token: PushNotificationToken) => {
-          const deviceInfo = await getDeviceInfo();
+      // 브라우저 정보
+      const browserInfo = getBrowserInfo();
 
-          const response = await fetch('/api/push/register', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              device_token: token.value,
-              platform: getPlatform(),
-              ...deviceInfo,
-            }),
-          });
+      // 서버에 토큰 등록
+      const response = await fetch('/api/push/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          device_token: token,
+          platform: 'web',
+          device_name: browserInfo.device_name,
+          os_version: browserInfo.os_version,
+        }),
+      });
 
-          if (response.ok) {
-            setIsRegistered(true);
-            logger.info('푸시 토큰 등록 완료');
-          }
-        });
-
-        // 알림 수신 리스너 (포그라운드)
-        await plugin.addListener(
-          'pushNotificationReceived',
-          (notification: PushNotificationData) => {
-            logger.info('푸시 알림 수신 (포그라운드):', notification);
-            // 포그라운드에서는 인앱 알림으로 처리 (NotificationProvider가 처리)
-          }
-        );
-
-        // 알림 클릭 리스너
-        await plugin.addListener(
-          'pushNotificationActionPerformed',
-          (action: { notification: PushNotificationData }) => {
-            logger.info('푸시 알림 클릭:', action);
-
-            // 링크가 있으면 해당 페이지로 이동
-            const link = action.notification.data?.link;
-            if (link && typeof window !== 'undefined') {
-              window.location.href = link;
-            }
-          }
-        );
-
+      if (response.ok) {
+        setIsRegistered(true);
+        logger.info('웹 푸시 토큰 등록 완료');
         return true;
       }
 
@@ -220,19 +208,26 @@ export function usePushNotifications() {
       logger.error('푸시 토큰 등록 실패:', error);
       return false;
     }
-  }, [user]);
+  }, [user, isSupported]);
 
   // 토큰 해제 (로그아웃 시)
-  const unregisterToken = useCallback(async (deviceToken: string): Promise<void> => {
-    try {
-      await fetch(`/api/push/register?device_token=${encodeURIComponent(deviceToken)}`, {
-        method: 'DELETE',
-      });
-      setIsRegistered(false);
-    } catch (error) {
-      logger.error('푸시 토큰 해제 실패:', error);
-    }
-  }, []);
+  const unregisterToken = useCallback(
+    async (deviceToken?: string): Promise<void> => {
+      const tokenToDelete = deviceToken || fcmToken;
+      if (!tokenToDelete) return;
+
+      try {
+        await fetch(`/api/push/register?device_token=${encodeURIComponent(tokenToDelete)}`, {
+          method: 'DELETE',
+        });
+        setIsRegistered(false);
+        setFcmToken(null);
+      } catch (error) {
+        logger.error('푸시 토큰 해제 실패:', error);
+      }
+    },
+    [fcmToken]
+  );
 
   // 설정 업데이트
   const updateSettings = useCallback(
@@ -261,11 +256,68 @@ export function usePushNotifications() {
   const initialize = useCallback(async (): Promise<void> => {
     if (!isSupported || !user) return;
 
+    // 이미 권한이 있으면 바로 등록
+    if (permission === 'granted') {
+      await registerToken();
+      return;
+    }
+
+    // 권한 요청 후 등록
     const granted = await requestPermission();
     if (granted) {
       await registerToken();
     }
-  }, [isSupported, user, requestPermission, registerToken]);
+  }, [isSupported, user, permission, requestPermission, registerToken]);
+
+  // 포그라운드 메시지 리스너 설정
+  useEffect(() => {
+    if (!isSupported || !isRegistered) return;
+
+    let unsubscribe: (() => void) | undefined;
+
+    const setupMessageListener = async () => {
+      try {
+        const { initializeApp, getApps } = await import('firebase/app');
+        const { getMessaging, onMessage } = await import('firebase/messaging');
+
+        const firebaseConfig = {
+          apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+          authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+          projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+          storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+          messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+          appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+        };
+
+        const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
+        const messaging = getMessaging(app);
+
+        // 포그라운드에서 메시지 수신
+        unsubscribe = onMessage(messaging, (payload) => {
+          logger.info('포그라운드 메시지 수신:', payload);
+
+          // 브라우저 알림 표시 (포그라운드에서는 자동 표시되지 않음)
+          if (Notification.permission === 'granted' && payload.notification) {
+            new Notification(payload.notification.title || '새 알림', {
+              body: payload.notification.body,
+              icon: '/icons/icon-192x192.png',
+              data: payload.data,
+            });
+          }
+        });
+      } catch (error) {
+        logger.error('메시지 리스너 설정 실패:', error);
+      }
+    };
+
+    setupMessageListener();
+
+    return () => {
+      if (unsubscribe) {
+        unsubscribe();
+      }
+    };
+  }, [isSupported, isRegistered]);
 
   return {
     isSupported,
@@ -273,6 +325,7 @@ export function usePushNotifications() {
     permission,
     settings,
     loading,
+    fcmToken,
     initialize,
     requestPermission,
     registerToken,
