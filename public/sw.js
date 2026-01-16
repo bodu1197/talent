@@ -1,64 +1,87 @@
-// 돌파구 Service Worker
-// 오프라인 캐시 및 빠른 로딩을 위한 PWA
+// Service Worker for Web Push Notifications
 
-const CACHE_NAME = 'dolpagu-v1';
-
-// 캐시할 파일들 (홈페이지 필수 리소스)
-const STATIC_ASSETS = ['/', '/manifest.json', '/icon.png'];
-
-// 설치 시 정적 파일 캐시
 self.addEventListener('install', (event) => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(STATIC_ASSETS);
-    })
-  );
+  console.log('[SW] Service Worker 설치됨');
   self.skipWaiting();
 });
 
-// 활성화 시 오래된 캐시 삭제
 self.addEventListener('activate', (event) => {
-  event.waitUntil(
-    caches.keys().then((cacheNames) => {
-      return Promise.all(
-        cacheNames.filter((name) => name !== CACHE_NAME).map((name) => caches.delete(name))
-      );
-    })
-  );
-  self.clients.claim();
+  console.log('[SW] Service Worker 활성화됨');
+  event.waitUntil(clients.claim());
 });
 
-// 네트워크 요청 가로채기 (Network First 전략)
-self.addEventListener('fetch', (event) => {
-  // API 요청은 캐시하지 않음
-  if (
-    event.request.url.includes('/api/') ||
-    event.request.url.includes('/rest/') ||
-    event.request.url.includes('supabase')
-  ) {
+// 푸시 이벤트 수신
+self.addEventListener('push', (event) => {
+  console.log('[SW] Push 이벤트 수신:', event);
+
+  let data = {
+    title: '새 알림',
+    body: '',
+    icon: '/icons/icon-192x192.png',
+    badge: '/icons/badge-72x72.png',
+    data: {},
+  };
+
+  if (event.data) {
+    try {
+      const payload = event.data.json();
+      data = {
+        title: payload.title || data.title,
+        body: payload.body || payload.message || data.body,
+        icon: payload.icon || data.icon,
+        badge: payload.badge || data.badge,
+        data: payload.data || payload,
+      };
+    } catch (e) {
+      data.body = event.data.text();
+    }
+  }
+
+  const options = {
+    body: data.body,
+    icon: data.icon,
+    badge: data.badge,
+    tag: data.data?.notification_id || 'default',
+    data: data.data,
+    vibrate: [200, 100, 200],
+    actions: [
+      { action: 'open', title: '열기' },
+      { action: 'close', title: '닫기' },
+    ],
+  };
+
+  event.waitUntil(self.registration.showNotification(data.title, options));
+});
+
+// 알림 클릭 처리
+self.addEventListener('notificationclick', (event) => {
+  console.log('[SW] 알림 클릭:', event);
+  event.notification.close();
+
+  if (event.action === 'close') {
     return;
   }
 
-  // GET 요청만 캐시
-  if (event.request.method !== 'GET') {
-    return;
-  }
+  const link = event.notification.data?.link || '/';
 
-  event.respondWith(
-    fetch(event.request)
-      .then((response) => {
-        // 성공적인 응답을 캐시에 저장
-        if (response.status === 200) {
-          const responseClone = response.clone();
-          caches.open(CACHE_NAME).then((cache) => {
-            cache.put(event.request, responseClone);
-          });
+  event.waitUntil(
+    clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clientList) => {
+      for (const client of clientList) {
+        if (client.url.includes(self.location.origin) && 'focus' in client) {
+          client.focus();
+          if (link !== '/') {
+            client.navigate(link);
+          }
+          return;
         }
-        return response;
-      })
-      .catch(() => {
-        // 네트워크 실패 시 캐시에서 반환
-        return caches.match(event.request);
-      })
+      }
+      if (clients.openWindow) {
+        return clients.openWindow(link);
+      }
+    })
   );
+});
+
+self.addEventListener('notificationclose', (event) => {
+  console.log('[SW] 알림 닫힘:', event);
 });

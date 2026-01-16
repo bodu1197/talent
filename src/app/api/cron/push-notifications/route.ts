@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { logServerError } from '@/lib/rollbar/server';
+import { sendSwing2AppPush, isSwing2AppConfigured } from '@/lib/swing2app/server';
 
-const FCM_SERVER_KEY = process.env.FCM_SERVER_KEY;
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 
@@ -21,45 +21,10 @@ interface NotificationData {
   metadata?: { link?: string };
 }
 
-interface DeviceToken {
-  id: string;
-  device_token: string;
-  platform: string;
-}
-
-interface FCMResult {
+interface PushResult {
   success: number;
   failure: number;
-}
-
-// FCM 발송 함수
-async function sendFCM(
-  tokens: string[],
-  title: string,
-  body: string,
-  data?: Record<string, unknown>
-): Promise<FCMResult> {
-  if (!FCM_SERVER_KEY || tokens.length === 0) return { success: 0, failure: 0 };
-
-  const response = await fetch('https://fcm.googleapis.com/fcm/send', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `key=${FCM_SERVER_KEY}`,
-    },
-    body: JSON.stringify({
-      registration_ids: tokens,
-      notification: { title, body, sound: 'default' },
-      data: { ...data, title, body },
-      priority: 'high',
-    }),
-  });
-
-  if (!response.ok) {
-    throw new Error(`FCM error: ${response.status}`);
-  }
-
-  return response.json();
+  processed: number;
 }
 
 // 큐 항목 완료 처리
@@ -70,71 +35,33 @@ async function markQueueCompleted(supabase: SupabaseClient, itemId: string) {
     .eq('id', itemId);
 }
 
-// 푸시 로그 저장
-async function savePushLogs(
-  supabase: SupabaseClient,
-  tokens: DeviceToken[],
-  item: QueueItem,
-  notification: NotificationData
-) {
-  await Promise.all(
-    tokens.map((token) =>
-      supabase.from('push_notification_logs').insert({
-        notification_id: item.notification_id,
-        user_id: item.user_id,
-        device_token_id: token.id,
-        title: notification.title,
-        body: notification.message,
-        data: { type: notification.type, link: notification.metadata?.link },
-        status: 'sent',
-        sent_at: new Date().toISOString(),
-      })
-    )
-  );
+// 큐 항목들을 처리 중 상태로 변경
+async function markItemsProcessing(supabase: SupabaseClient, items: QueueItem[]) {
+  for (const item of items) {
+    await supabase
+      .from('push_notification_queue')
+      .update({ status: 'processing' })
+      .eq('id', item.id);
+  }
 }
 
-// 단일 푸시 알림 처리
-async function processQueueItem(supabase: SupabaseClient, item: QueueItem): Promise<FCMResult> {
-  // 처리 중 상태로 변경
-  await supabase.from('push_notification_queue').update({ status: 'processing' }).eq('id', item.id);
-
-  const notification = item.notifications;
-
-  // 알림이 삭제된 경우 큐에서 제거
-  if (!notification) {
-    await markQueueCompleted(supabase, item.id);
-    return { success: 0, failure: 0 };
-  }
-
-  // 사용자의 활성 디바이스 토큰 조회
-  const { data: tokens } = await supabase
-    .from('user_device_tokens')
-    .select('id, device_token, platform')
-    .eq('user_id', item.user_id)
-    .eq('is_active', true)
-    .eq('push_enabled', true);
-
-  if (!tokens || tokens.length === 0) {
-    await markQueueCompleted(supabase, item.id);
-    return { success: 0, failure: 0 };
-  }
-
-  const deviceTokens = (tokens as DeviceToken[]).map((t) => t.device_token);
-
-  // FCM 발송
-  const fcmResult = await sendFCM(deviceTokens, notification.title, notification.message, {
+// 푸시 로그 저장 (Swing2App용)
+async function savePushLog(
+  supabase: SupabaseClient,
+  item: QueueItem,
+  notification: NotificationData,
+  success: boolean
+) {
+  await supabase.from('push_notification_logs').insert({
     notification_id: item.notification_id,
-    type: notification.type,
-    link: notification.metadata?.link,
+    user_id: item.user_id,
+    device_token_id: null,
+    title: notification.title,
+    body: notification.message,
+    data: { type: notification.type, link: notification.metadata?.link },
+    status: success ? 'sent' : 'failed',
+    sent_at: new Date().toISOString(),
   });
-
-  // 로그 저장
-  await savePushLogs(supabase, tokens as DeviceToken[], item, notification);
-
-  // 완료 처리
-  await markQueueCompleted(supabase, item.id);
-
-  return fcmResult;
 }
 
 // 실패한 큐 항목 재시도 마크
@@ -149,25 +76,156 @@ async function markQueueRetry(supabase: SupabaseClient, item: QueueItem, error: 
     .eq('id', item.id);
 }
 
+// 단일 푸시 알림 처리
+async function processQueueItem(supabase: SupabaseClient, item: QueueItem): Promise<PushResult> {
+  await supabase.from('push_notification_queue').update({ status: 'processing' }).eq('id', item.id);
+
+  const notification = item.notifications;
+
+  if (!notification) {
+    await markQueueCompleted(supabase, item.id);
+    return { success: 0, failure: 0, processed: 1 };
+  }
+
+  const result = await sendSwing2AppPush({
+    userIds: [item.user_id],
+    title: notification.title,
+    content: notification.message,
+    linkUrl: notification.metadata?.link,
+  });
+
+  await savePushLog(supabase, item, notification, result.success);
+  await markQueueCompleted(supabase, item.id);
+
+  return {
+    success: result.success ? result.userCount || 1 : 0,
+    failure: result.success ? 0 : 1,
+    processed: 1,
+  };
+}
+
+// 알림 없는 항목들 완료 처리
+async function processEmptyNotifications(
+  supabase: SupabaseClient,
+  items: QueueItem[]
+): Promise<PushResult> {
+  for (const item of items) {
+    await markQueueCompleted(supabase, item.id);
+  }
+  return { success: 0, failure: 0, processed: items.length };
+}
+
+// 배치 발송 결과 처리
+async function processBatchResult(
+  supabase: SupabaseClient,
+  items: QueueItem[],
+  notification: NotificationData,
+  sendResult: { success: boolean; userCount?: number }
+): Promise<PushResult> {
+  for (const item of items) {
+    await savePushLog(supabase, item, notification, sendResult.success);
+    await markQueueCompleted(supabase, item.id);
+  }
+
+  const userCount = items.length;
+  return {
+    success: sendResult.success ? sendResult.userCount || userCount : 0,
+    failure: sendResult.success ? 0 : userCount,
+    processed: userCount,
+  };
+}
+
+// 배치 실패 시 개별 처리
+async function processBatchFallback(
+  supabase: SupabaseClient,
+  items: QueueItem[]
+): Promise<PushResult> {
+  let success = 0;
+  let failure = 0;
+  let processed = 0;
+
+  for (const item of items) {
+    try {
+      const result = await processQueueItem(supabase, item);
+      processed += result.processed;
+      success += result.success;
+      failure += result.failure;
+    } catch (itemError) {
+      logServerError(itemError instanceof Error ? itemError : new Error(String(itemError)), {
+        context: 'push_queue_item_error',
+        queue_id: item.id,
+      });
+      await markQueueRetry(supabase, item, itemError);
+    }
+  }
+
+  return { success, failure, processed };
+}
+
+// 알림 그룹 처리
+async function processNotificationGroup(
+  supabase: SupabaseClient,
+  items: QueueItem[]
+): Promise<PushResult> {
+  const notification = items[0].notifications;
+
+  if (!notification) {
+    return processEmptyNotifications(supabase, items);
+  }
+
+  await markItemsProcessing(supabase, items);
+
+  const userIds = items.map((item) => item.user_id);
+
+  try {
+    const result = await sendSwing2AppPush({
+      userIds,
+      title: notification.title,
+      content: notification.message,
+      linkUrl: notification.metadata?.link,
+    });
+
+    return processBatchResult(supabase, items, notification, result);
+  } catch (error) {
+    logServerError(error instanceof Error ? error : new Error(String(error)), {
+      context: 'push_batch_error',
+    });
+    return processBatchFallback(supabase, items);
+  }
+}
+
+// 큐 항목들을 알림 ID별로 그룹화
+function groupByNotification(queueItems: QueueItem[]): Map<string, QueueItem[]> {
+  const itemsByNotification = new Map<string, QueueItem[]>();
+
+  for (const item of queueItems) {
+    const key = item.notification_id;
+    if (!itemsByNotification.has(key)) {
+      itemsByNotification.set(key, []);
+    }
+    itemsByNotification.get(key)!.push(item);
+  }
+
+  return itemsByNotification;
+}
+
 // GET /api/cron/push-notifications - 푸시 알림 대기열 처리
 export async function GET(request: NextRequest) {
   try {
-    // Vercel Cron 인증
     const authHeader = request.headers.get('authorization');
     if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    if (!FCM_SERVER_KEY) {
+    if (!isSwing2AppConfigured()) {
       return NextResponse.json({
-        message: 'FCM_SERVER_KEY not configured, skipping push notifications',
+        message: 'Swing2App API not configured, skipping push notifications',
         processed: 0,
       });
     }
 
     const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
 
-    // 대기 중인 푸시 알림 조회 (최대 100개씩)
     const { data: queueItems, error: queueError } = await supabase
       .from('push_notification_queue')
       .select(
@@ -184,26 +242,25 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ message: '처리할 푸시 알림이 없습니다', processed: 0 });
     }
 
-    let processed = 0;
-    let success = 0;
-    let failed = 0;
+    const itemsByNotification = groupByNotification(queueItems as unknown as QueueItem[]);
 
-    for (const item of queueItems as QueueItem[]) {
-      try {
-        const result = await processQueueItem(supabase, item);
-        processed++;
-        success += result.success;
-        failed += result.failure;
-      } catch (itemError) {
-        logServerError(itemError instanceof Error ? itemError : new Error(String(itemError)), {
-          context: 'push_queue_item_error',
-          queue_id: item.id,
-        });
-        await markQueueRetry(supabase, item, itemError);
-      }
+    let totalProcessed = 0;
+    let totalSuccess = 0;
+    let totalFailed = 0;
+
+    for (const [, items] of itemsByNotification) {
+      const result = await processNotificationGroup(supabase, items);
+      totalProcessed += result.processed;
+      totalSuccess += result.success;
+      totalFailed += result.failure;
     }
 
-    return NextResponse.json({ message: '푸시 알림 처리 완료', processed, success, failed });
+    return NextResponse.json({
+      message: '푸시 알림 처리 완료',
+      processed: totalProcessed,
+      success: totalSuccess,
+      failed: totalFailed,
+    });
   } catch (error) {
     logServerError(error instanceof Error ? error : new Error(String(error)), {
       context: 'push_cron_error',

@@ -29,13 +29,11 @@ function getBrowserInfo(): { device_name: string; os_version: string } {
   let browserName = 'Unknown Browser';
   let osName = 'Unknown OS';
 
-  // 브라우저 감지
   if (userAgent.includes('Chrome')) browserName = 'Chrome';
   else if (userAgent.includes('Safari')) browserName = 'Safari';
   else if (userAgent.includes('Firefox')) browserName = 'Firefox';
   else if (userAgent.includes('Edge')) browserName = 'Edge';
 
-  // OS 감지
   if (userAgent.includes('Windows')) osName = 'Windows';
   else if (userAgent.includes('Mac')) osName = 'macOS';
   else if (userAgent.includes('Linux')) osName = 'Linux';
@@ -56,7 +54,8 @@ async function registerServiceWorker(): Promise<ServiceWorkerRegistration | null
   }
 
   try {
-    const registration = await navigator.serviceWorker.register('/firebase-messaging-sw.js');
+    const registration = await navigator.serviceWorker.register('/sw.js');
+    await navigator.serviceWorker.ready;
     logger.info('Service Worker 등록 성공');
     return registration;
   } catch (error) {
@@ -65,42 +64,38 @@ async function registerServiceWorker(): Promise<ServiceWorkerRegistration | null
   }
 }
 
-// FCM 토큰 가져오기
-async function getFCMToken(): Promise<string | null> {
+// Base64 URL을 Uint8Array로 변환
+function urlBase64ToUint8Array(base64String: string): Uint8Array {
+  const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
+  const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
+  const rawData = window.atob(base64);
+  const outputArray = new Uint8Array(rawData.length);
+  for (let i = 0; i < rawData.length; ++i) {
+    outputArray[i] = rawData.charCodeAt(i);
+  }
+  return outputArray;
+}
+
+// 푸시 구독 정보를 서버에 전송
+async function subscribeToPush(
+  registration: ServiceWorkerRegistration
+): Promise<PushSubscription | null> {
   try {
-    // Firebase SDK 동적 임포트
-    const { initializeApp, getApps } = await import('firebase/app');
-    const { getMessaging, getToken } = await import('firebase/messaging');
+    // VAPID 공개키 가져오기
+    const vapidPublicKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY;
+    if (!vapidPublicKey) {
+      logger.error('VAPID 공개키가 설정되지 않았습니다');
+      return null;
+    }
 
-    // Firebase 설정
-    const firebaseConfig = {
-      apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-      authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-      projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-      storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
-      messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
-      appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
-    };
-
-    // Firebase 앱 초기화 (이미 초기화되지 않은 경우에만)
-    const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
-
-    // 메시징 인스턴스 가져오기
-    const messaging = getMessaging(app);
-
-    // Service Worker 등록
-    const registration = await registerServiceWorker();
-    if (!registration) return null;
-
-    // FCM 토큰 가져오기
-    const token = await getToken(messaging, {
-      vapidKey: process.env.NEXT_PUBLIC_FIREBASE_VAPID_KEY,
-      serviceWorkerRegistration: registration,
+    const subscription = await registration.pushManager.subscribe({
+      userVisibleOnly: true,
+      applicationServerKey: urlBase64ToUint8Array(vapidPublicKey) as BufferSource,
     });
 
-    return token;
+    return subscription;
   } catch (error) {
-    logger.error('FCM 토큰 가져오기 실패:', error);
+    logger.error('푸시 구독 실패:', error);
     return null;
   }
 }
@@ -112,7 +107,7 @@ export function usePushNotifications() {
   const [permission, setPermission] = useState<'granted' | 'denied' | 'default'>('default');
   const [settings, setSettings] = useState<PushNotificationSettings | null>(null);
   const [loading, setLoading] = useState(true);
-  const [fcmToken, setFcmToken] = useState<string | null>(null);
+  const [subscription, setSubscription] = useState<PushSubscription | null>(null);
 
   // 푸시 알림 지원 여부 확인
   useEffect(() => {
@@ -173,24 +168,25 @@ export function usePushNotifications() {
     if (!user || !isSupported) return false;
 
     try {
-      // FCM 토큰 가져오기
-      const token = await getFCMToken();
-      if (!token) {
-        logger.warn('FCM 토큰을 가져올 수 없습니다');
-        return false;
-      }
+      // 서비스 워커 등록
+      const registration = await registerServiceWorker();
+      if (!registration) return false;
 
-      setFcmToken(token);
+      // 푸시 구독
+      const pushSubscription = await subscribeToPush(registration);
+      if (!pushSubscription) return false;
+
+      setSubscription(pushSubscription);
 
       // 브라우저 정보
       const browserInfo = getBrowserInfo();
 
-      // 서버에 토큰 등록
+      // 서버에 구독 정보 등록
       const response = await fetch('/api/push/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          device_token: token,
+          subscription: pushSubscription.toJSON(),
           platform: 'web',
           device_name: browserInfo.device_name,
           os_version: browserInfo.os_version,
@@ -199,35 +195,37 @@ export function usePushNotifications() {
 
       if (response.ok) {
         setIsRegistered(true);
-        logger.info('웹 푸시 토큰 등록 완료');
+        logger.info('웹 푸시 구독 완료');
         return true;
       }
 
       return false;
     } catch (error) {
-      logger.error('푸시 토큰 등록 실패:', error);
+      logger.error('푸시 등록 실패:', error);
       return false;
     }
   }, [user, isSupported]);
 
   // 토큰 해제 (로그아웃 시)
-  const unregisterToken = useCallback(
-    async (deviceToken?: string): Promise<void> => {
-      const tokenToDelete = deviceToken || fcmToken;
-      if (!tokenToDelete) return;
+  const unregisterToken = useCallback(async (): Promise<void> => {
+    try {
+      if (subscription) {
+        await subscription.unsubscribe();
 
-      try {
-        await fetch(`/api/push/register?device_token=${encodeURIComponent(tokenToDelete)}`, {
+        await fetch('/api/push/register', {
           method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            endpoint: subscription.endpoint,
+          }),
         });
-        setIsRegistered(false);
-        setFcmToken(null);
-      } catch (error) {
-        logger.error('푸시 토큰 해제 실패:', error);
       }
-    },
-    [fcmToken]
-  );
+      setIsRegistered(false);
+      setSubscription(null);
+    } catch (error) {
+      logger.error('푸시 해제 실패:', error);
+    }
+  }, [subscription]);
 
   // 설정 업데이트
   const updateSettings = useCallback(
@@ -269,63 +267,13 @@ export function usePushNotifications() {
     }
   }, [isSupported, user, permission, requestPermission, registerToken]);
 
-  // 포그라운드 메시지 리스너 설정
-  useEffect(() => {
-    if (!isSupported || !isRegistered) return;
-
-    let unsubscribe: (() => void) | undefined;
-
-    const setupMessageListener = async () => {
-      try {
-        const { initializeApp, getApps } = await import('firebase/app');
-        const { getMessaging, onMessage } = await import('firebase/messaging');
-
-        const firebaseConfig = {
-          apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-          authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-          projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-          storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
-          messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
-          appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
-        };
-
-        const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
-        const messaging = getMessaging(app);
-
-        // 포그라운드에서 메시지 수신
-        unsubscribe = onMessage(messaging, (payload) => {
-          logger.info('포그라운드 메시지 수신:', payload);
-
-          // 브라우저 알림 표시 (포그라운드에서는 자동 표시되지 않음)
-          if (Notification.permission === 'granted' && payload.notification) {
-            new Notification(payload.notification.title || '새 알림', {
-              body: payload.notification.body,
-              icon: '/icons/icon-192x192.png',
-              data: payload.data,
-            });
-          }
-        });
-      } catch (error) {
-        logger.error('메시지 리스너 설정 실패:', error);
-      }
-    };
-
-    setupMessageListener();
-
-    return () => {
-      if (unsubscribe) {
-        unsubscribe();
-      }
-    };
-  }, [isSupported, isRegistered]);
-
   return {
     isSupported,
     isRegistered,
     permission,
     settings,
     loading,
-    fcmToken,
+    subscription,
     initialize,
     requestPermission,
     registerToken,

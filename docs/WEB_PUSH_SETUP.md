@@ -1,76 +1,71 @@
 # 웹 푸시 알림 설정 가이드
 
-이 문서는 웹앱에서 Firebase Cloud Messaging (FCM)을 사용한 푸시 알림 설정 방법을 설명합니다.
+이 문서는 웹앱에서 Web Push API를 사용한 푸시 알림 설정 방법을 설명합니다.
 
-## 1. Firebase 프로젝트 설정
+## 1. VAPID 키 생성
 
-### 1.1 Firebase 프로젝트 생성
+### 1.1 web-push 패키지로 VAPID 키 생성
 
-1. [Firebase Console](https://console.firebase.google.com) 접속
-2. 새 프로젝트 생성 또는 기존 프로젝트 선택
-3. 프로젝트 설정 → 일반 → 웹 앱 추가
+```bash
+npx web-push generate-vapid-keys
+```
 
-### 1.2 웹 앱 등록
+결과 예시:
 
-1. 앱 닉네임 입력 (예: "Talent Web")
-2. Firebase Hosting 설정은 선택사항
-3. 앱 등록 후 Firebase 설정 정보 복사
+```
+=======================================
 
-### 1.3 Cloud Messaging 설정
+Public Key:
+BNxRWaVp...생략...
 
-1. 프로젝트 설정 → Cloud Messaging
-2. **웹 푸시 인증서** 섹션에서 "키 쌍 생성" 클릭
-3. 생성된 VAPID 키 복사
+Private Key:
+3HCy7a9Q...생략...
+
+=======================================
+```
+
+### 1.2 생성된 키 저장
+
+생성된 키를 환경 변수에 저장합니다.
 
 ## 2. 환경 변수 설정
 
 ### 2.1 클라이언트 환경 변수 (.env.local)
 
 ```env
-# Firebase 클라이언트 설정
-NEXT_PUBLIC_FIREBASE_API_KEY=AIzaSy...
-NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your-project.firebaseapp.com
-NEXT_PUBLIC_FIREBASE_PROJECT_ID=your-project-id
-NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your-project.appspot.com
-NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=123456789
-NEXT_PUBLIC_FIREBASE_APP_ID=1:123456789:web:abc123
-NEXT_PUBLIC_FIREBASE_VAPID_KEY=BKagOny0KF_...
+# VAPID 공개키 (클라이언트에서 사용)
+NEXT_PUBLIC_VAPID_PUBLIC_KEY=BNxRWaVp...생략...
 ```
 
 ### 2.2 서버 환경 변수 (Vercel)
 
 ```env
-# FCM 서버 키 (Legacy API)
-FCM_SERVER_KEY=AAAA...
+# VAPID 공개키
+NEXT_PUBLIC_VAPID_PUBLIC_KEY=BNxRWaVp...생략...
+
+# VAPID 비밀키 (서버에서만 사용)
+VAPID_PRIVATE_KEY=3HCy7a9Q...생략...
+
+# VAPID Subject (mailto: 또는 https:// URL)
+VAPID_SUBJECT=mailto:support@your-domain.com
 
 # Cron 작업 인증
 CRON_SECRET=your-random-secret-string
 ```
 
-**FCM 서버 키 가져오기:**
+**CRON_SECRET 생성:**
 
-1. Firebase Console → 프로젝트 설정 → Cloud Messaging
-2. Cloud Messaging API (Legacy) 활성화
-3. 서버 키 복사
-
-## 3. Service Worker 설정
-
-### 3.1 firebase-messaging-sw.js 수정
-
-`public/firebase-messaging-sw.js` 파일에서 Firebase 설정을 실제 값으로 변경:
-
-```javascript
-firebase.initializeApp({
-  apiKey: 'YOUR_API_KEY',
-  authDomain: 'YOUR_PROJECT_ID.firebaseapp.com',
-  projectId: 'YOUR_PROJECT_ID',
-  storageBucket: 'YOUR_PROJECT_ID.appspot.com',
-  messagingSenderId: 'YOUR_SENDER_ID',
-  appId: 'YOUR_APP_ID',
-});
+```bash
+openssl rand -hex 32
 ```
 
-> **참고:** Service Worker는 환경 변수에 접근할 수 없으므로 직접 값을 입력해야 합니다.
+## 3. Service Worker
+
+`public/sw.js` 파일이 웹 푸시 알림을 처리합니다:
+
+- 푸시 이벤트 수신 및 알림 표시
+- 알림 클릭 시 앱으로 이동
+- 백그라운드 메시지 처리
 
 ## 4. Vercel Cron 설정
 
@@ -92,9 +87,6 @@ firebase.initializeApp({
 Vercel Dashboard → Settings → Environment Variables:
 
 - `CRON_SECRET`: 랜덤 문자열 생성
-  ```bash
-  openssl rand -hex 32
-  ```
 
 ## 5. 푸시 알림 사용하기
 
@@ -168,19 +160,32 @@ function NotificationSettings() {
 2. 브라우저에서 알림 권한 허용
 3. 개발자 도구 → Application → Service Workers 확인
 
-### 7.2 FCM 테스트 발송
+### 7.2 Web Push 테스트 발송 (Node.js)
 
-```bash
-curl -X POST "https://fcm.googleapis.com/fcm/send" \
-  -H "Authorization: key=YOUR_FCM_SERVER_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "to": "DEVICE_FCM_TOKEN",
-    "notification": {
-      "title": "테스트 알림",
-      "body": "푸시 알림이 정상 작동합니다!"
-    }
-  }'
+```javascript
+const webpush = require('web-push');
+
+webpush.setVapidDetails(
+  'mailto:support@your-domain.com',
+  'YOUR_VAPID_PUBLIC_KEY',
+  'YOUR_VAPID_PRIVATE_KEY'
+);
+
+const subscription = {
+  endpoint: 'https://fcm.googleapis.com/fcm/send/...',
+  keys: {
+    p256dh: '...',
+    auth: '...',
+  },
+};
+
+webpush.sendNotification(
+  subscription,
+  JSON.stringify({
+    title: '테스트 알림',
+    body: '푸시 알림이 정상 작동합니다!',
+  })
+);
 ```
 
 ## 8. 문제 해결
@@ -212,42 +217,31 @@ navigator.serviceWorker.getRegistrations().then((registrations) => {
 ```
 사용자 브라우저
     │
-    ├── Service Worker (firebase-messaging-sw.js)
+    ├── Service Worker (sw.js)
     │   └── 백그라운드 메시지 수신
     │
     └── usePushNotifications Hook
-        ├── FCM 토큰 발급
-        ├── 서버에 토큰 등록
+        ├── Web Push 구독 (VAPID 키 사용)
+        ├── 서버에 구독 정보 등록
         └── 포그라운드 메시지 수신
 
 서버 (Next.js API)
     │
-    ├── /api/push/register - 토큰 등록/해제
+    ├── /api/push/register - 구독 등록/해제
     ├── /api/push/settings - 설정 관리
-    └── /api/cron/push-notifications - 발송 처리
+    ├── /api/push/send - 직접 발송
+    └── /api/cron/push-notifications - 대기열 처리
 
 Supabase (DB)
     │
-    ├── user_device_tokens - FCM 토큰 저장
+    ├── user_device_tokens - 구독 정보 저장
+    │   ├── device_token: 구독 endpoint
+    │   └── device_id: 전체 subscription JSON
     ├── push_notification_queue - 발송 대기열
     └── push_notification_logs - 발송 로그
 ```
 
-## 10. WebView 앱에서 사용
-
-웹앱을 WebView로 감싸서 앱스토어에 배포할 경우:
-
-### Android WebView
-
-Android WebView에서는 웹 푸시가 제한적으로 지원됩니다.
-Chrome Custom Tabs 또는 Trusted Web Activity (TWA) 사용을 권장합니다.
-
-### iOS WKWebView
-
-iOS WKWebView는 웹 푸시를 직접 지원하지 않습니다.
-PWA로 "홈 화면에 추가"하여 사용하거나, 네이티브 푸시를 구현해야 합니다.
-
-### 권장: PWA 설치 유도
+## 10. PWA 설치 유도
 
 웹앱을 PWA로 설치하도록 유도하면 네이티브 앱처럼 푸시 알림을 받을 수 있습니다.
 
