@@ -228,6 +228,8 @@ export const SHOPPING_RANGE_LABELS: Record<ShoppingRange, string> = {
 export type HelperGrade = 'NEWBIE' | 'REGULAR' | 'PRO' | 'MASTER';
 export type SubscriptionStatus = 'active' | 'expired' | 'cancelled' | 'trial';
 
+export type HelperVerificationStatus = 'pending' | 'submitted' | 'verified' | 'rejected';
+
 export interface HelperProfile {
   id: string;
   user_id: string;
@@ -251,6 +253,14 @@ export interface HelperProfile {
   last_active_at: string | null;
   created_at: string;
   updated_at: string;
+  // 문서 관련 필드
+  id_card_url: string | null;
+  selfie_url: string | null;
+  criminal_record_url: string | null;
+  documents_submitted_at: string | null;
+  documents_verified_at: string | null;
+  documents_rejected_reason: string | null;
+  verification_status: HelperVerificationStatus;
   // Relations
   user?: {
     id: string;
