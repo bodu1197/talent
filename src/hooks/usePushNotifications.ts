@@ -21,7 +21,7 @@ export interface PushNotificationSettings {
 
 // 브라우저 정보 가져오기
 function getBrowserInfo(): { device_name: string; os_version: string } {
-  if (typeof globalThis.window === 'undefined') {
+  if (globalThis.window === undefined) {
     return { device_name: 'Unknown', os_version: 'Unknown' };
   }
 
@@ -113,7 +113,7 @@ export function usePushNotifications() {
   useEffect(() => {
     const checkSupport = () => {
       const supported =
-        typeof globalThis.window !== 'undefined' &&
+        globalThis.window !== undefined &&
         'Notification' in globalThis.window &&
         'serviceWorker' in navigator &&
         'PushManager' in globalThis.window;

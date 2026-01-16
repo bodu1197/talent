@@ -41,8 +41,7 @@ const SWING2APP_SDK_URL =
   'https://pcdn2.swing2app.co.kr/swing_public_src/v3/2024_02_28_002/js/swing_app_on_web.js';
 
 // Safe window access helper (avoids direct window reference for SSR compatibility)
-const getWindow = (): Window | undefined =>
-  typeof globalThis.window !== 'undefined' ? globalThis.window : undefined;
+const getWindow = (): Window | undefined => globalThis.window;
 
 let sdkLoaded = false;
 let sdkLoadPromise: Promise<void> | null = null;
