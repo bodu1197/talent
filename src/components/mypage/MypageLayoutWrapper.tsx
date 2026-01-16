@@ -29,12 +29,12 @@ export default function MypageLayoutWrapper({
 
   // 자동으로 프로필 정보 로드
   useEffect(() => {
-    // initialProfileData가 이미 있으면 사용 (dashboard에서 전달한 경우)
-    if (initialProfileData !== undefined) {
-      setProfileData(initialProfileData);
-    } else {
-      // profileData가 없으면 자동 로드
+    // profileData가 없으면 자동 로드
+    if (initialProfileData === undefined) {
       loadProfileData();
+    } else {
+      // initialProfileData가 이미 있으면 사용 (dashboard에서 전달한 경우)
+      setProfileData(initialProfileData);
     }
 
     // 판매자 모드일 때 등록 여부 확인
