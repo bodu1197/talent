@@ -1,27 +1,10 @@
 /**
- * 주소 검색 및 좌표 변환 유틸리티
- * - 도로명주소 API (juso.go.kr): 주소 검색 + 좌표 변환
+ * 주소 및 좌표 변환 유틸리티
+ * - Daum Postcode: 주소 검색 (프론트엔드에서 직접 사용)
  * - 카카오 API: 역지오코딩 (좌표 → 주소) - 서버 API 경유
  */
 
 // ==================== 타입 정의 ====================
-
-export interface AddressResult {
-  address: string; // 도로명주소 또는 지번주소
-  roadAddress: string; // 도로명주소
-  jibunAddress: string; // 지번주소
-  latitude: number; // 위도
-  longitude: number; // 경도
-  region: string; // 시군구 (예: 강남구)
-  sigunguCode: string; // 시군구 코드
-  bcode: string; // 법정동 코드
-}
-
-export interface AddressSearchResult {
-  results: AddressResult[];
-  total: number;
-  hasMore: boolean;
-}
 
 export interface ReverseGeocodeResult {
   address: string;
@@ -29,41 +12,6 @@ export interface ReverseGeocodeResult {
   region: string; // 시군구
   latitude: number;
   longitude: number;
-}
-
-// ==================== 도로명주소 API (juso.go.kr) ====================
-
-/**
- * 도로명주소 API로 주소 검색
- * - 무료, 제한 없음
- * - 좌표 포함 (admCd, rnMgtSn 활용)
- */
-export async function searchAddress(
-  keyword: string,
-  page: number = 1,
-  countPerPage: number = 10
-): Promise<AddressSearchResult> {
-  if (!keyword.trim()) {
-    return { results: [], total: 0, hasMore: false };
-  }
-
-  try {
-    // 도로명주소 API 호출 (클라이언트에서 직접 호출 불가, 서버 API 경유)
-    const response = await fetch('/api/address/search', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ keyword, page, countPerPage }),
-    });
-
-    if (!response.ok) {
-      throw new Error('Address search failed');
-    }
-
-    return await response.json();
-  } catch (error) {
-    console.error('주소 검색 오류:', error);
-    return { results: [], total: 0, hasMore: false };
-  }
 }
 
 // ==================== 카카오 역지오코딩 API (서버 API 경유) ====================
