@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback } from 'react';
 import { useAuth } from '@/components/providers/AuthProvider';
-import swing2app, {
+import {
   loadSwing2AppSDK,
   isSwing2App,
   getCurrentPlatform,
@@ -123,14 +123,12 @@ export function useSwing2App(): Swing2AppState & {
       setState((prev) => ({ ...prev, isMemberSynced: true }));
 
       logger.info('[Swing2App] 회원 로그인 연동 완료', { userId });
-    } else {
+    } else if (state.isMemberSynced) {
       // 로그아웃 연동
-      if (state.isMemberSynced) {
-        syncLogout();
-        setState((prev) => ({ ...prev, isMemberSynced: false }));
+      syncLogout();
+      setState((prev) => ({ ...prev, isMemberSynced: false }));
 
-        logger.info('[Swing2App] 회원 로그아웃 연동 완료');
-      }
+      logger.info('[Swing2App] 회원 로그아웃 연동 완료');
     }
   }, [user, state.isLoaded, state.isInApp, state.isMemberSynced]);
 
@@ -141,6 +139,6 @@ export function useSwing2App(): Swing2AppState & {
 }
 
 // swing2app 유틸리티도 함께 내보내기
-export { swing2app };
+export { default as swing2app } from '@/lib/swing2app';
 
 export default useSwing2App;

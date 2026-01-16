@@ -40,6 +40,10 @@ declare global {
 const SWING2APP_SDK_URL =
   'https://pcdn2.swing2app.co.kr/swing_public_src/v3/2024_02_28_002/js/swing_app_on_web.js';
 
+// Safe window access helper (avoids direct window reference for SSR compatibility)
+const getWindow = (): Window | undefined =>
+  typeof globalThis.window !== 'undefined' ? globalThis.window : undefined;
+
 let sdkLoaded = false;
 let sdkLoadPromise: Promise<void> | null = null;
 
@@ -47,15 +51,16 @@ let sdkLoadPromise: Promise<void> | null = null;
  * Swing2App SDK 로드
  */
 export async function loadSwing2AppSDK(): Promise<void> {
-  if (typeof window === 'undefined') return;
+  if (!getWindow()) return;
 
   if (sdkLoaded) return;
 
   if (sdkLoadPromise) return sdkLoadPromise;
 
   sdkLoadPromise = new Promise((resolve, reject) => {
+    const win = getWindow();
     // 이미 로드되어 있는지 확인
-    if (window.swingWebViewPlugin) {
+    if (win?.swingWebViewPlugin) {
       sdkLoaded = true;
       resolve();
       return;
@@ -84,10 +89,11 @@ export async function loadSwing2AppSDK(): Promise<void> {
  * Swing2App 앱 내에서 실행 중인지 확인
  */
 export function isSwing2App(): boolean {
-  if (typeof window === 'undefined') return false;
+  const win = getWindow();
+  if (!win) return false;
 
   // swingWebViewPlugin이 있으면 Swing2App 앱 내부
-  if (window.swingWebViewPlugin) return true;
+  if (win.swingWebViewPlugin) return true;
 
   // User Agent로 추가 확인 (Swing2App 앱은 특별한 UA를 가질 수 있음)
   const ua = navigator.userAgent.toLowerCase();
@@ -98,10 +104,11 @@ export function isSwing2App(): boolean {
  * 현재 플랫폼 확인
  */
 export function getCurrentPlatform(): 'android' | 'ios' | 'web' {
-  if (typeof window === 'undefined') return 'web';
+  const win = getWindow();
+  if (!win) return 'web';
 
-  if (window.swingWebViewPlugin) {
-    const platform = window.swingWebViewPlugin.app.methods.getCurrentPlatform();
+  if (win.swingWebViewPlugin) {
+    const platform = win.swingWebViewPlugin.app.methods.getCurrentPlatform();
     if (platform === 'web browser') return 'web';
     return platform;
   }
@@ -119,10 +126,11 @@ export function getCurrentPlatform(): 'android' | 'ios' | 'web' {
  * @param userName 사용자 이름 (표시용)
  */
 export function syncLogin(userId: string, userName?: string): void {
-  if (typeof window === 'undefined') return;
+  const win = getWindow();
+  if (!win) return;
 
-  if (window.swingWebViewPlugin) {
-    window.swingWebViewPlugin.app.login.doAppLogin(userId, userName || userId);
+  if (win.swingWebViewPlugin) {
+    win.swingWebViewPlugin.app.login.doAppLogin(userId, userName || userId);
   }
 }
 
@@ -132,10 +140,11 @@ export function syncLogin(userId: string, userName?: string): void {
  * 웹사이트에서 로그아웃 시 호출
  */
 export function syncLogout(): void {
-  if (typeof window === 'undefined') return;
+  const win = getWindow();
+  if (!win) return;
 
-  if (window.swingWebViewPlugin) {
-    window.swingWebViewPlugin.app.login.doAppLogout();
+  if (win.swingWebViewPlugin) {
+    win.swingWebViewPlugin.app.login.doAppLogout();
   }
 }
 
@@ -147,12 +156,11 @@ export function syncLogout(): void {
 export async function getPushNotificationStatus(): Promise<
   'enabled' | 'disabled_system' | 'disabled_app' | 'not_supported'
 > {
-  if (typeof window === 'undefined') return 'not_supported';
-
-  if (!window.swingWebViewPlugin) return 'not_supported';
+  const win = getWindow();
+  if (!win?.swingWebViewPlugin) return 'not_supported';
 
   try {
-    const status = await window.swingWebViewPlugin.app.methods.isNotificationEnabled();
+    const status = await win.swingWebViewPlugin.app.methods.isNotificationEnabled();
 
     switch (status) {
       case '1':
@@ -177,12 +185,11 @@ export async function getAppInfo(): Promise<{
   deviceModel: string;
   osVersion: string;
 } | null> {
-  if (typeof window === 'undefined') return null;
-
-  if (!window.swingWebViewPlugin) return null;
+  const win = getWindow();
+  if (!win?.swingWebViewPlugin) return null;
 
   try {
-    return await window.swingWebViewPlugin.app.methods.getAppVersion();
+    return await win.swingWebViewPlugin.app.methods.getAppVersion();
   } catch {
     return null;
   }
@@ -192,12 +199,13 @@ export async function getAppInfo(): Promise<{
  * 앱 스토리지에 데이터 저장 (자동 로그인 등에 활용)
  */
 export function setStorageItem(key: string, value: string): void {
-  if (typeof window === 'undefined') return;
+  const win = getWindow();
+  if (!win) return;
 
-  if (window.swingWebViewPlugin) {
-    window.swingWebViewPlugin.app.storage.setItem(key, value);
+  if (win.swingWebViewPlugin) {
+    win.swingWebViewPlugin.app.storage.setItem(key, value);
   } else {
-    localStorage.setItem(key, value);
+    globalThis.localStorage.setItem(key, value);
   }
 }
 
@@ -205,25 +213,27 @@ export function setStorageItem(key: string, value: string): void {
  * 앱 스토리지에서 데이터 가져오기
  */
 export async function getStorageItem(key: string): Promise<string | null> {
-  if (typeof window === 'undefined') return null;
+  const win = getWindow();
+  if (!win) return null;
 
-  if (window.swingWebViewPlugin) {
-    return await window.swingWebViewPlugin.app.storage.getItem(key);
+  if (win.swingWebViewPlugin) {
+    return await win.swingWebViewPlugin.app.storage.getItem(key);
   }
 
-  return localStorage.getItem(key);
+  return globalThis.localStorage.getItem(key);
 }
 
 /**
  * 앱 스토리지에서 데이터 삭제
  */
 export function removeStorageItem(key: string): void {
-  if (typeof window === 'undefined') return;
+  const win = getWindow();
+  if (!win) return;
 
-  if (window.swingWebViewPlugin) {
-    window.swingWebViewPlugin.app.storage.removeItem(key);
+  if (win.swingWebViewPlugin) {
+    win.swingWebViewPlugin.app.storage.removeItem(key);
   } else {
-    localStorage.removeItem(key);
+    globalThis.localStorage.removeItem(key);
   }
 }
 

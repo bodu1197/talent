@@ -811,7 +811,384 @@ CREATE POLICY "authenticated_or_service_insert_service_view_logs" ON service_vie
   FOR INSERT WITH CHECK (auth.uid() IS NOT NULL OR auth.jwt() ->> 'role' = 'service_role');
 
 -- ============================================
+-- 4. auth_rls_initplan 성능 최적화
+--
+-- 문제: auth.uid(), auth.jwt()가 행마다 재평가되어 성능 저하
+-- 해결: (select auth.uid()), (select auth.jwt())로 변경하여 한 번만 평가
+-- ============================================
+
+-- 4-1. ai_support_sessions
+DROP POLICY IF EXISTS "Users can create ai sessions" ON ai_support_sessions;
+DROP POLICY IF EXISTS "Users can view own ai sessions" ON ai_support_sessions;
+DROP POLICY IF EXISTS "Users can update own ai sessions" ON ai_support_sessions;
+
+CREATE POLICY "Users can create ai sessions" ON ai_support_sessions
+  FOR INSERT WITH CHECK (((select auth.uid()) = user_id) OR (user_id IS NULL));
+
+CREATE POLICY "Users can view own ai sessions" ON ai_support_sessions
+  FOR SELECT USING (((select auth.uid()) = user_id) OR (user_id IS NULL));
+
+CREATE POLICY "Users can update own ai sessions" ON ai_support_sessions
+  FOR UPDATE USING (((select auth.uid()) = user_id) OR (user_id IS NULL));
+
+-- 4-2. ai_support_messages
+DROP POLICY IF EXISTS "Users can create ai messages" ON ai_support_messages;
+DROP POLICY IF EXISTS "Users can view ai messages from own sessions" ON ai_support_messages;
+
+CREATE POLICY "Users can create ai messages" ON ai_support_messages
+  FOR INSERT WITH CHECK (
+    session_id IN (
+      SELECT id FROM ai_support_sessions
+      WHERE (user_id = (select auth.uid())) OR (user_id IS NULL)
+    )
+  );
+
+CREATE POLICY "Users can view ai messages from own sessions" ON ai_support_messages
+  FOR SELECT USING (
+    session_id IN (
+      SELECT id FROM ai_support_sessions
+      WHERE (user_id = (select auth.uid())) OR (user_id IS NULL)
+    )
+  );
+
+-- 4-3. disputes
+DROP POLICY IF EXISTS "disputes_insert_policy" ON disputes;
+DROP POLICY IF EXISTS "disputes_select_policy" ON disputes;
+DROP POLICY IF EXISTS "disputes_update_policy" ON disputes;
+
+CREATE POLICY "disputes_insert_policy" ON disputes
+  FOR INSERT WITH CHECK ((select auth.uid()) = plaintiff_id);
+
+CREATE POLICY "disputes_select_policy" ON disputes
+  FOR SELECT USING (
+    (select auth.uid()) = plaintiff_id OR
+    (select auth.uid()) = defendant_id OR
+    is_admin()
+  );
+
+CREATE POLICY "disputes_update_policy" ON disputes
+  FOR UPDATE USING (
+    (select auth.uid()) = plaintiff_id OR
+    (select auth.uid()) = defendant_id OR
+    is_admin()
+  );
+
+-- 4-4. dispute_evidences
+DROP POLICY IF EXISTS "dispute_evidences_insert_policy" ON dispute_evidences;
+DROP POLICY IF EXISTS "dispute_evidences_select_policy" ON dispute_evidences;
+
+CREATE POLICY "dispute_evidences_insert_policy" ON dispute_evidences
+  FOR INSERT WITH CHECK ((select auth.uid()) = submitted_by);
+
+CREATE POLICY "dispute_evidences_select_policy" ON dispute_evidences
+  FOR SELECT USING (
+    dispute_id IN (
+      SELECT id FROM disputes
+      WHERE plaintiff_id = (select auth.uid()) OR defendant_id = (select auth.uid())
+    ) OR is_admin()
+  );
+
+-- 4-5. dispute_messages
+DROP POLICY IF EXISTS "dispute_messages_insert_policy" ON dispute_messages;
+DROP POLICY IF EXISTS "dispute_messages_select_policy" ON dispute_messages;
+
+CREATE POLICY "dispute_messages_insert_policy" ON dispute_messages
+  FOR INSERT WITH CHECK (
+    (select auth.uid()) = sender_id OR
+    sender_id IS NULL OR
+    is_admin()
+  );
+
+CREATE POLICY "dispute_messages_select_policy" ON dispute_messages
+  FOR SELECT USING (
+    dispute_id IN (
+      SELECT id FROM disputes
+      WHERE plaintiff_id = (select auth.uid()) OR defendant_id = (select auth.uid())
+    ) OR is_admin()
+  );
+
+-- ============================================
+-- 5. multiple_permissive_policies 통합 + auth_rls_initplan 수정
+--
+-- 문제: 같은 테이블/역할/작업에 여러 permissive 정책이 있으면 성능 저하
+-- 해결: OR 조건으로 단일 정책으로 통합
+-- ============================================
+
+-- 5-1. inquiries (SELECT 정책 통합)
+DROP POLICY IF EXISTS "authenticated_insert_inquiries" ON inquiries;
+DROP POLICY IF EXISTS "inquiries_select_admin" ON inquiries;
+DROP POLICY IF EXISTS "inquiries_select_own" ON inquiries;
+DROP POLICY IF EXISTS "inquiries_update_admin" ON inquiries;
+DROP POLICY IF EXISTS "inquiries_delete_admin" ON inquiries;
+
+CREATE POLICY "inquiries_insert" ON inquiries
+  FOR INSERT WITH CHECK ((select auth.uid()) IS NOT NULL);
+
+CREATE POLICY "inquiries_select" ON inquiries
+  FOR SELECT USING (
+    user_id = (select auth.uid()) OR
+    EXISTS (
+      SELECT 1 FROM admins
+      WHERE admins.user_id = (select auth.uid()) AND admins.role = 'super_admin'
+    )
+  );
+
+CREATE POLICY "inquiries_update" ON inquiries
+  FOR UPDATE USING (
+    EXISTS (
+      SELECT 1 FROM admins
+      WHERE admins.user_id = (select auth.uid()) AND admins.role = 'super_admin'
+    )
+  );
+
+CREATE POLICY "inquiries_delete" ON inquiries
+  FOR DELETE USING (
+    EXISTS (
+      SELECT 1 FROM admins
+      WHERE admins.user_id = (select auth.uid()) AND admins.role = 'super_admin'
+    )
+  );
+
+-- 5-2. user_device_tokens (ALL 정책을 개별 정책으로 + 통합)
+DROP POLICY IF EXISTS "service_role_all" ON user_device_tokens;
+DROP POLICY IF EXISTS "users_own_tokens_select" ON user_device_tokens;
+DROP POLICY IF EXISTS "users_own_tokens_insert" ON user_device_tokens;
+DROP POLICY IF EXISTS "users_own_tokens_update" ON user_device_tokens;
+DROP POLICY IF EXISTS "users_own_tokens_delete" ON user_device_tokens;
+
+CREATE POLICY "device_tokens_select" ON user_device_tokens
+  FOR SELECT USING (
+    (select auth.uid()) = user_id OR
+    ((select auth.jwt()) ->> 'role') = 'service_role'
+  );
+
+CREATE POLICY "device_tokens_insert" ON user_device_tokens
+  FOR INSERT WITH CHECK (
+    (select auth.uid()) = user_id OR
+    ((select auth.jwt()) ->> 'role') = 'service_role'
+  );
+
+CREATE POLICY "device_tokens_update" ON user_device_tokens
+  FOR UPDATE USING (
+    (select auth.uid()) = user_id OR
+    ((select auth.jwt()) ->> 'role') = 'service_role'
+  );
+
+CREATE POLICY "device_tokens_delete" ON user_device_tokens
+  FOR DELETE USING (
+    (select auth.uid()) = user_id OR
+    ((select auth.jwt()) ->> 'role') = 'service_role'
+  );
+
+-- 5-3. push_notification_logs (ALL + SELECT 통합)
+DROP POLICY IF EXISTS "service_role_logs" ON push_notification_logs;
+DROP POLICY IF EXISTS "users_own_logs" ON push_notification_logs;
+
+CREATE POLICY "push_logs_select" ON push_notification_logs
+  FOR SELECT USING (
+    (select auth.uid()) = user_id OR
+    ((select auth.jwt()) ->> 'role') = 'service_role'
+  );
+
+CREATE POLICY "push_logs_insert" ON push_notification_logs
+  FOR INSERT WITH CHECK (
+    ((select auth.jwt()) ->> 'role') = 'service_role'
+  );
+
+CREATE POLICY "push_logs_update" ON push_notification_logs
+  FOR UPDATE USING (
+    ((select auth.jwt()) ->> 'role') = 'service_role'
+  );
+
+CREATE POLICY "push_logs_delete" ON push_notification_logs
+  FOR DELETE USING (
+    ((select auth.jwt()) ->> 'role') = 'service_role'
+  );
+
+-- 5-4. push_notification_queue (ALL → 개별 정책)
+DROP POLICY IF EXISTS "service_role_queue" ON push_notification_queue;
+
+CREATE POLICY "push_queue_select" ON push_notification_queue
+  FOR SELECT USING (
+    ((select auth.jwt()) ->> 'role') = 'service_role'
+  );
+
+CREATE POLICY "push_queue_insert" ON push_notification_queue
+  FOR INSERT WITH CHECK (
+    ((select auth.jwt()) ->> 'role') = 'service_role'
+  );
+
+CREATE POLICY "push_queue_update" ON push_notification_queue
+  FOR UPDATE USING (
+    ((select auth.jwt()) ->> 'role') = 'service_role'
+  );
+
+CREATE POLICY "push_queue_delete" ON push_notification_queue
+  FOR DELETE USING (
+    ((select auth.jwt()) ->> 'role') = 'service_role'
+  );
+
+-- ============================================
+-- 6. 기존 INSERT 정책 auth_rls_initplan 수정
+-- ============================================
+
+-- 6-1. payments_insert
+DROP POLICY IF EXISTS "payments_insert" ON payments;
+CREATE POLICY "payments_insert" ON payments
+  FOR INSERT WITH CHECK (
+    (select auth.uid()) IS NOT NULL OR
+    ((select auth.jwt()) ->> 'role') = 'service_role'
+  );
+
+-- 6-2. service_role_insert_users
+DROP POLICY IF EXISTS "service_role_insert_users" ON users;
+CREATE POLICY "service_role_insert_users" ON users
+  FOR INSERT WITH CHECK (
+    ((select auth.jwt()) ->> 'role') = 'service_role'
+  );
+
+-- 6-3. admin_insert_service_categories
+DROP POLICY IF EXISTS "admin_insert_service_categories" ON service_categories;
+CREATE POLICY "admin_insert_service_categories" ON service_categories
+  FOR INSERT WITH CHECK (
+    EXISTS (
+      SELECT 1 FROM profiles
+      WHERE user_id = (select auth.uid()) AND role = 'admin'
+    )
+  );
+
+-- 6-4. service_role_insert_order_settlements
+DROP POLICY IF EXISTS "service_role_insert_order_settlements" ON order_settlements;
+CREATE POLICY "service_role_insert_order_settlements" ON order_settlements
+  FOR INSERT WITH CHECK (
+    ((select auth.jwt()) ->> 'role') = 'service_role'
+  );
+
+-- 6-5. service_role_insert_activity_logs
+DROP POLICY IF EXISTS "service_role_insert_activity_logs" ON activity_logs;
+CREATE POLICY "service_role_insert_activity_logs" ON activity_logs
+  FOR INSERT WITH CHECK (
+    ((select auth.jwt()) ->> 'role') = 'service_role'
+  );
+
+-- 6-6. service_role_insert_notifications
+DROP POLICY IF EXISTS "service_role_insert_notifications" ON notifications;
+CREATE POLICY "service_role_insert_notifications" ON notifications
+  FOR INSERT WITH CHECK (
+    ((select auth.jwt()) ->> 'role') = 'service_role'
+  );
+
+-- 6-7. service_role_insert_schema_migrations
+DROP POLICY IF EXISTS "service_role_insert_schema_migrations" ON schema_migrations;
+CREATE POLICY "service_role_insert_schema_migrations" ON schema_migrations
+  FOR INSERT WITH CHECK (
+    ((select auth.jwt()) ->> 'role') = 'service_role'
+  );
+
+-- ============================================
+-- 7. visitor_stats 정책 auth_rls_initplan 수정
+-- ============================================
+
+-- visitor_stats_daily
+DROP POLICY IF EXISTS "service_role_insert_visitor_stats_daily" ON visitor_stats_daily;
+DROP POLICY IF EXISTS "service_role_update_visitor_stats_daily" ON visitor_stats_daily;
+
+CREATE POLICY "service_role_insert_visitor_stats_daily" ON visitor_stats_daily
+  FOR INSERT WITH CHECK (
+    ((select auth.jwt()) ->> 'role') = 'service_role'
+  );
+
+CREATE POLICY "service_role_update_visitor_stats_daily" ON visitor_stats_daily
+  FOR UPDATE USING (
+    ((select auth.jwt()) ->> 'role') = 'service_role'
+  );
+
+-- visitor_stats_hourly
+DROP POLICY IF EXISTS "service_role_insert_visitor_stats_hourly" ON visitor_stats_hourly;
+DROP POLICY IF EXISTS "service_role_update_visitor_stats_hourly" ON visitor_stats_hourly;
+
+CREATE POLICY "service_role_insert_visitor_stats_hourly" ON visitor_stats_hourly
+  FOR INSERT WITH CHECK (
+    ((select auth.jwt()) ->> 'role') = 'service_role'
+  );
+
+CREATE POLICY "service_role_update_visitor_stats_hourly" ON visitor_stats_hourly
+  FOR UPDATE USING (
+    ((select auth.jwt()) ->> 'role') = 'service_role'
+  );
+
+-- visitor_stats_monthly
+DROP POLICY IF EXISTS "service_role_insert_visitor_stats_monthly" ON visitor_stats_monthly;
+DROP POLICY IF EXISTS "service_role_update_visitor_stats_monthly" ON visitor_stats_monthly;
+
+CREATE POLICY "service_role_insert_visitor_stats_monthly" ON visitor_stats_monthly
+  FOR INSERT WITH CHECK (
+    ((select auth.jwt()) ->> 'role') = 'service_role'
+  );
+
+CREATE POLICY "service_role_update_visitor_stats_monthly" ON visitor_stats_monthly
+  FOR UPDATE USING (
+    ((select auth.jwt()) ->> 'role') = 'service_role'
+  );
+
+-- ============================================
+-- 8. 기타 로그 테이블 정책 auth_rls_initplan 수정
+-- ============================================
+
+-- page_views
+DROP POLICY IF EXISTS "authenticated_or_service_insert_page_views" ON page_views;
+CREATE POLICY "page_views_insert" ON page_views
+  FOR INSERT WITH CHECK (
+    (select auth.uid()) IS NOT NULL OR
+    ((select auth.jwt()) ->> 'role') = 'service_role'
+  );
+
+-- search_logs
+DROP POLICY IF EXISTS "authenticated_or_service_insert_search_logs" ON search_logs;
+CREATE POLICY "search_logs_insert" ON search_logs
+  FOR INSERT WITH CHECK (
+    (select auth.uid()) IS NOT NULL OR
+    ((select auth.jwt()) ->> 'role') = 'service_role'
+  );
+
+-- service_view_logs
+DROP POLICY IF EXISTS "authenticated_or_service_insert_service_view_logs" ON service_view_logs;
+CREATE POLICY "service_view_logs_insert" ON service_view_logs
+  FOR INSERT WITH CHECK (
+    (select auth.uid()) IS NOT NULL OR
+    ((select auth.jwt()) ->> 'role') = 'service_role'
+  );
+
+-- ============================================
+-- 9. 외래 키 인덱스 추가 (unindexed_foreign_keys)
+--
+-- 문제: FK 컬럼에 인덱스가 없으면 JOIN 및 삭제 시 성능 저하
+-- 해결: FK 컬럼에 인덱스 추가
+-- ============================================
+
+CREATE INDEX IF NOT EXISTS idx_dispute_evidences_submitted_by
+  ON dispute_evidences(submitted_by);
+
+CREATE INDEX IF NOT EXISTS idx_dispute_messages_sender_id
+  ON dispute_messages(sender_id);
+
+CREATE INDEX IF NOT EXISTS idx_disputes_service_id
+  ON disputes(service_id);
+
+CREATE INDEX IF NOT EXISTS idx_inquiries_replied_by
+  ON inquiries(replied_by);
+
+CREATE INDEX IF NOT EXISTS idx_push_notification_logs_device_token_id
+  ON push_notification_logs(device_token_id);
+
+CREATE INDEX IF NOT EXISTS idx_push_notification_queue_user_id
+  ON push_notification_queue(user_id);
+
+-- ============================================
 -- 완료: 슈퍼앱 수준 보안 적용
 -- - 17개 함수에 search_path = '' 설정
 -- - 14개 RLS 정책 강화 (모든 WITH CHECK true 제거)
+-- - 43개 RLS 정책 auth_rls_initplan 최적화 (subselect 적용)
+-- - 30개 multiple_permissive_policies 통합
+-- - 6개 외래 키 인덱스 추가
 -- ============================================

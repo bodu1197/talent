@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
 
     const body: RegisterRequest = await request.json();
 
-    if (!body.subscription || !body.subscription.endpoint || !body.subscription.keys) {
+    if (!body.subscription?.endpoint || !body.subscription?.keys) {
       return NextResponse.json({ error: '유효한 구독 정보가 필요합니다' }, { status: 400 });
     }
 

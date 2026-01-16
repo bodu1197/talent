@@ -21,7 +21,7 @@ export interface PushNotificationSettings {
 
 // 브라우저 정보 가져오기
 function getBrowserInfo(): { device_name: string; os_version: string } {
-  if (typeof window === 'undefined') {
+  if (typeof globalThis.window === 'undefined') {
     return { device_name: 'Unknown', os_version: 'Unknown' };
   }
 
@@ -67,11 +67,11 @@ async function registerServiceWorker(): Promise<ServiceWorkerRegistration | null
 // Base64 URL을 Uint8Array로 변환
 function urlBase64ToUint8Array(base64String: string): Uint8Array {
   const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
-  const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
-  const rawData = window.atob(base64);
+  const base64 = (base64String + padding).replaceAll('-', '+').replaceAll('_', '/');
+  const rawData = globalThis.atob(base64);
   const outputArray = new Uint8Array(rawData.length);
   for (let i = 0; i < rawData.length; ++i) {
-    outputArray[i] = rawData.charCodeAt(i);
+    outputArray[i] = rawData.codePointAt(i) ?? 0;
   }
   return outputArray;
 }
@@ -113,10 +113,10 @@ export function usePushNotifications() {
   useEffect(() => {
     const checkSupport = () => {
       const supported =
-        typeof window !== 'undefined' &&
-        'Notification' in window &&
+        typeof globalThis.window !== 'undefined' &&
+        'Notification' in globalThis.window &&
         'serviceWorker' in navigator &&
-        'PushManager' in window;
+        'PushManager' in globalThis.window;
 
       setIsSupported(supported);
 
