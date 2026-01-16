@@ -37,6 +37,15 @@ function getVerificationButtonStyle(
   return `${colorClasses[baseColor]} disabled:bg-gray-300 disabled:cursor-not-allowed`;
 }
 
+// 시간 선택 옵션 (30분 단위, 00:00 ~ 23:30)
+const TIME_OPTIONS = Array.from({ length: 24 }, (_, i) => {
+  const hour = i.toString().padStart(2, '0');
+  return [
+    { value: `${hour}:00`, label: `${hour}:00` },
+    { value: `${hour}:30`, label: `${hour}:30` },
+  ];
+}).flat();
+
 // 계좌 검증 버튼 내용 컴포넌트
 function BankVerificationButtonContent({ status }: { readonly status: VerificationStatus }) {
   if (status.isVerifying) {
@@ -556,13 +565,11 @@ export default function SellerProfileEditClient({ profile: initialProfile }: Pro
                       }}
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                     >
-                      {Array.from({ length: 24 }, (_, i) => {
-                        const hour = i.toString().padStart(2, '0');
-                        return [
-                          <option key={`${hour}:00`} value={`${hour}:00`}>{`${hour}:00`}</option>,
-                          <option key={`${hour}:30`} value={`${hour}:30`}>{`${hour}:30`}</option>,
-                        ];
-                      })}
+                      {TIME_OPTIONS.map((opt) => (
+                        <option key={opt.value} value={opt.value}>
+                          {opt.label}
+                        </option>
+                      ))}
                     </select>
                   </div>
                   <div>
@@ -584,13 +591,11 @@ export default function SellerProfileEditClient({ profile: initialProfile }: Pro
                       }}
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                     >
-                      {Array.from({ length: 24 }, (_, i) => {
-                        const hour = i.toString().padStart(2, '0');
-                        return [
-                          <option key={`${hour}:00`} value={`${hour}:00`}>{`${hour}:00`}</option>,
-                          <option key={`${hour}:30`} value={`${hour}:30`}>{`${hour}:30`}</option>,
-                        ];
-                      })}
+                      {TIME_OPTIONS.map((opt) => (
+                        <option key={opt.value} value={opt.value}>
+                          {opt.label}
+                        </option>
+                      ))}
                     </select>
                   </div>
                 </div>

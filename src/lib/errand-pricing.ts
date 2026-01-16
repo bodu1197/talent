@@ -47,6 +47,32 @@ export const PRICING_CONSTANTS = {
   SHOPPING_FREE_ITEMS: 2, // 무료 품목 수
 };
 
+// 날씨 할증 multiplier 계산
+const getWeatherMultiplier = (weather: WeatherCondition): number => {
+  switch (weather) {
+    case 'RAIN':
+      return PRICING_CONSTANTS.WEATHER_RAIN_MULTIPLIER;
+    case 'SNOW':
+      return PRICING_CONSTANTS.WEATHER_SNOW_MULTIPLIER;
+    case 'EXTREME':
+      return PRICING_CONSTANTS.WEATHER_EXTREME_MULTIPLIER;
+    default:
+      return 1;
+  }
+};
+
+// 시간대 할증 계산
+const getTimeSurcharge = (timeOfDay: TimeCondition): number => {
+  switch (timeOfDay) {
+    case 'LATE_NIGHT':
+      return PRICING_CONSTANTS.TIME_LATE_NIGHT_SURCHARGE;
+    case 'RUSH_HOUR':
+      return PRICING_CONSTANTS.TIME_RUSH_HOUR_SURCHARGE;
+    default:
+      return 0;
+  }
+};
+
 // 가격 계산 함수
 export const calculateErrandPrice = (factors: PriceFactors): PriceBreakdown => {
   const { distance, weather, timeOfDay, weight } = factors;
@@ -66,23 +92,10 @@ export const calculateErrandPrice = (factors: PriceFactors): PriceBreakdown => {
   }
 
   // 4. 시간대 할증
-  let timeSurcharge = 0;
-  if (timeOfDay === 'LATE_NIGHT') {
-    timeSurcharge = PRICING_CONSTANTS.TIME_LATE_NIGHT_SURCHARGE;
-  } else if (timeOfDay === 'RUSH_HOUR') {
-    timeSurcharge = PRICING_CONSTANTS.TIME_RUSH_HOUR_SURCHARGE;
-  }
+  const timeSurcharge = getTimeSurcharge(timeOfDay);
 
   // 5. 날씨 할증 (기본 + 거리에 대해 적용)
-  let weatherMultiplier = 1;
-  if (weather === 'RAIN') {
-    weatherMultiplier = PRICING_CONSTANTS.WEATHER_RAIN_MULTIPLIER;
-  } else if (weather === 'SNOW') {
-    weatherMultiplier = PRICING_CONSTANTS.WEATHER_SNOW_MULTIPLIER;
-  } else if (weather === 'EXTREME') {
-    weatherMultiplier = PRICING_CONSTANTS.WEATHER_EXTREME_MULTIPLIER;
-  }
-
+  const weatherMultiplier = getWeatherMultiplier(weather);
   const weatherSurcharge = Math.round((basePrice + distancePrice) * (weatherMultiplier - 1));
 
   // 6. 총 요금 계산
@@ -230,23 +243,10 @@ export const calculateShoppingPrice = (factors: ShoppingPriceFactors): ShoppingP
   const weightSurcharge = hasHeavyItem ? PRICING_CONSTANTS.WEIGHT_HEAVY_SURCHARGE : 0;
 
   // 5. 시간대 할증
-  let timeSurcharge = 0;
-  if (timeOfDay === 'LATE_NIGHT') {
-    timeSurcharge = PRICING_CONSTANTS.TIME_LATE_NIGHT_SURCHARGE;
-  } else if (timeOfDay === 'RUSH_HOUR') {
-    timeSurcharge = PRICING_CONSTANTS.TIME_RUSH_HOUR_SURCHARGE;
-  }
+  const timeSurcharge = getTimeSurcharge(timeOfDay);
 
   // 6. 날씨 할증
-  let weatherMultiplier = 1;
-  if (weather === 'RAIN') {
-    weatherMultiplier = PRICING_CONSTANTS.WEATHER_RAIN_MULTIPLIER;
-  } else if (weather === 'SNOW') {
-    weatherMultiplier = PRICING_CONSTANTS.WEATHER_SNOW_MULTIPLIER;
-  } else if (weather === 'EXTREME') {
-    weatherMultiplier = PRICING_CONSTANTS.WEATHER_EXTREME_MULTIPLIER;
-  }
-
+  const weatherMultiplier = getWeatherMultiplier(weather);
   const weatherSurcharge = Math.round(
     (basePrice + rangeFee + distancePrice) * (weatherMultiplier - 1)
   );
